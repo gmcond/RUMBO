@@ -1,0 +1,29 @@
+{
+  "common": {
+    "appName": "RUMBO",
+    "loading": "Carregant…",
+    "save": "Desa",
+    "cancel": "Cancel·la",
+    "back": "Torna"
+  },
+  "nav": {
+    "study": "Estudi",
+    "admin": "Admin",
+    "login": "Entra",
+    "register": "Crea un compte",
+    "logout": "Surt",
+    "toggleTheme": "Canvia el tema"
+  },
+  "landing": {
+    "tagline": "La teva titulació nàutica, sense naufragis",
+    "subtitle": "Estudia el PER al teu ritme, amb flashcards intel·ligents, simulacres reals de la teva comunitat autònoma i tota la informació del títol sempre al dia.",
+    "ctaPrimary": "Comença gratis",
+    "ctaSecondary": "Ja tinc compte",
+    "learnTitle": "Aprèn",
+    "learnBody": "Lliçons interactives, diagrames clicables, flashcards amb repetició espaiada i simulacres d'examen configurats per a la teva comunitat autònoma.",
+    "infoTitle": "Informa't",
+    "infoBody": "Requisits, taxes, convocatòries i escoles de la teva comunitat, verificats i amb font oficial citada.",
+    "sailTitle": "Navega",
+    "sailBody": "Quan tinguis el títol: troba amarratge, embarcació i serveis de patró en un sol lloc."
+  }
+}

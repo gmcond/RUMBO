@@ -1,0 +1,15 @@
+node_modules/
+.next/
+out/
+build/
+coverage/
+playwright-report/
+test-results/
+package-lock.json
+supabase/.temp/
+supabase/migrations/
+# markdown de contenido y docs: no reformatear (tablas y semilla)
+content/
+docs/
+CLAUDE.md
+public/

@@ -1,0 +1,29 @@
+{
+  "common": {
+    "appName": "RUMBO",
+    "loading": "Cargando…",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "back": "Volver"
+  },
+  "nav": {
+    "study": "Estudio",
+    "admin": "Admin",
+    "login": "Entrar",
+    "register": "Crear cuenta",
+    "logout": "Salir",
+    "toggleTheme": "Cambiar tema"
+  },
+  "landing": {
+    "tagline": "Tu titulación náutica, sin naufragios",
+    "subtitle": "Estudia el PER a tu ritmo, con flashcards inteligentes, simulacros reales de tu comunidad autónoma y toda la información del título siempre al día.",
+    "ctaPrimary": "Empieza gratis",
+    "ctaSecondary": "Ya tengo cuenta",
+    "learnTitle": "Aprende",
+    "learnBody": "Lecciones interactivas, diagramas clicables, flashcards con repetición espaciada y simulacros de examen configurados para tu comunidad autónoma.",
+    "infoTitle": "Infórmate",
+    "infoBody": "Requisitos, tasas, convocatorias y escuelas de tu comunidad, verificados y con fuente oficial citada.",
+    "sailTitle": "Navega",
+    "sailBody": "Cuando tengas el título: encuentra amarre, embarcación y servicios de patrón en un solo sitio."
+  }
+}
