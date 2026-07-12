@@ -12,7 +12,8 @@ export default defineConfig({
   },
   projects: [
     // Móvil primero (CLAUDE.md regla 6): el proyecto principal emula un móvil de ~390px
-    { name: "mobile", use: { ...devices["iPhone 13"] } },
+    // Pixel 7 usa Chromium (evita descargar WebKit en local y CI)
+    { name: "mobile", use: { ...devices["Pixel 7"] } },
     { name: "desktop", use: { ...devices["Desktop Chrome"] } },
   ],
   webServer: {
