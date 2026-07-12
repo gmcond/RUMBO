@@ -25,5 +25,42 @@
     "infoBody": "Requisits, taxes, convocatòries i escoles de la teva comunitat, verificats i amb font oficial citada.",
     "sailTitle": "Navega",
     "sailBody": "Quan tinguis el títol: troba amarratge, embarcació i serveis de patró en un sol lloc."
+  },
+  "auth": {
+    "loginTitle": "Entra al teu compte",
+    "registerTitle": "Crea el teu compte",
+    "email": "Correu electrònic",
+    "password": "Contrasenya",
+    "passwordHint": "Mínim 8 caràcters",
+    "loginCta": "Entra",
+    "registerCta": "Crea el compte",
+    "googleCta": "Continua amb Google",
+    "noAccount": "No tens compte?",
+    "hasAccount": "Ja tens compte?",
+    "checkEmail": "Compte creat. Revisa el teu correu per confirmar-lo abans d'entrar.",
+    "authError": "No s'ha pogut completar l'operació. Torna-ho a provar.",
+    "invalidCredentials": "Correu o contrasenya incorrectes",
+    "emailNotConfirmed": "Confirma el teu correu abans d'entrar (revisa la safata)",
+    "emailInUse": "Ja existeix un compte amb aquest correu",
+    "weakPassword": "La contrasenya és massa feble",
+    "or": "o"
+  },
+  "onboarding": {
+    "title": "Prepara el teu rumb",
+    "subtitle": "Explica'ns una mica de tu per personalitzar l'estudi.",
+    "name": "El teu nom",
+    "namePlaceholder": "Com et diem?",
+    "ccaa": "Comunitat autònoma on t'examinaràs",
+    "ccaaPlaceholder": "Tria la teva comunitat",
+    "degree": "Titulació objectiu",
+    "cta": "Comença a estudiar"
+  },
+  "study": {
+    "title": "El teu estudi",
+    "placeholder": "Aquí viuran les teves lliçons, flashcards i simulacres. Arriben a la Fase 1."
+  },
+  "admin": {
+    "title": "Panell d'administració",
+    "placeholder": "Cua de changesets, moderació i banc de preguntes. Arriben en fases posteriors."
   }
 }

@@ -25,5 +25,42 @@
     "infoBody": "Requisitos, tasas, convocatorias y escuelas de tu comunidad, verificados y con fuente oficial citada.",
     "sailTitle": "Navega",
     "sailBody": "Cuando tengas el título: encuentra amarre, embarcación y servicios de patrón en un solo sitio."
+  },
+  "auth": {
+    "loginTitle": "Entra en tu cuenta",
+    "registerTitle": "Crea tu cuenta",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "passwordHint": "Mínimo 8 caracteres",
+    "loginCta": "Entrar",
+    "registerCta": "Crear cuenta",
+    "googleCta": "Continuar con Google",
+    "noAccount": "¿No tienes cuenta?",
+    "hasAccount": "¿Ya tienes cuenta?",
+    "checkEmail": "Cuenta creada. Revisa tu correo para confirmarla antes de entrar.",
+    "authError": "No se pudo completar la operación. Inténtalo de nuevo.",
+    "invalidCredentials": "Correo o contraseña incorrectos",
+    "emailNotConfirmed": "Confirma tu correo antes de entrar (revisa tu bandeja)",
+    "emailInUse": "Ya existe una cuenta con este correo",
+    "weakPassword": "La contraseña es demasiado débil",
+    "or": "o"
+  },
+  "onboarding": {
+    "title": "Prepara tu rumbo",
+    "subtitle": "Cuéntanos un poco de ti para personalizar el estudio.",
+    "name": "Tu nombre",
+    "namePlaceholder": "¿Cómo te llamamos?",
+    "ccaa": "Comunidad autónoma donde te examinarás",
+    "ccaaPlaceholder": "Elige tu comunidad",
+    "degree": "Titulación objetivo",
+    "cta": "Empezar a estudiar"
+  },
+  "study": {
+    "title": "Tu estudio",
+    "placeholder": "Aquí vivirán tus lecciones, flashcards y simulacros. Llegan en la Fase 1."
+  },
+  "admin": {
+    "title": "Panel de administración",
+    "placeholder": "Cola de changesets, moderación y banco de preguntas. Llegan en fases posteriores."
   }
 }
