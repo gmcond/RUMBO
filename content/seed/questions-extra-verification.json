@@ -1,0 +1,366 @@
+[
+  {
+    "unit": 1,
+    "enunciado": "La aleta es la zona curva del costado próxima a:",
+    "verdict": "publish",
+    "citas": ["las aletas, las zonas curvas próximas a la popa"]
+  },
+  {
+    "unit": 1,
+    "enunciado": "El puntal es:",
+    "verdict": "publish",
+    "citas": ["Puntal: altura desde la quilla hasta la cubierta"]
+  },
+  {
+    "unit": 1,
+    "enunciado": "La cavitación es:",
+    "verdict": "publish",
+    "citas": [
+      "La cavitación es la formación de burbujas de vapor sobre las palas que reduce el empuje y las erosiona",
+      "el paso es el avance teórico en una vuelta completa"
+    ]
+  },
+  {
+    "unit": 1,
+    "enunciado": "Un asiento apopante significa que la embarcación:",
+    "verdict": "publish",
+    "citas": ["Asiento: diferencia entre el calado de popa y el de proa (asiento apopante si cala más de popa)"]
+  },
+  {
+    "unit": 2,
+    "enunciado": "El cabo de fibra que flota pero se degrada con el sol es el de:",
+    "verdict": "publish",
+    "citas": [
+      "el polipropileno (ligero y flota, pero se degrada con el sol)",
+      "el nylon (elástico, ideal para amarras y fondeo porque absorbe tirones)"
+    ]
+  },
+  {
+    "unit": 2,
+    "enunciado": "La codera sirve para:",
+    "verdict": "publish",
+    "citas": ["Coderas: a una boya o muerto por el costado exterior; evitan que el barco golpee el muelle con viento de fuera y ayudan al desatraque"]
+  },
+  {
+    "unit": 2,
+    "enunciado": "Para fondos de roca y pesca, el ancla adecuada es:",
+    "verdict": "publish",
+    "citas": ["rezón (de varias uñas, para fondos de roca y pesca)"]
+  },
+  {
+    "unit": 2,
+    "enunciado": "Con mal tiempo, la longitud de la línea de fondeo se aumenta hasta:",
+    "verdict": "publish",
+    "citas": ["de 3 a 5 veces la sonda (profundidad), aumentando hasta 7-8 veces con mal tiempo"]
+  },
+  {
+    "unit": 3,
+    "enunciado": "Un chaleco de 275N está pensado para:",
+    "verdict": "publish",
+    "citas": ["275N: mar abierto en condiciones extremas y con ropa de abrigo o equipo pesado"]
+  },
+  {
+    "unit": 3,
+    "enunciado": "El NAVTEX es:",
+    "verdict": "publish",
+    "citas": [
+      "NAVTEX: sistema automático de recepción de información de seguridad marítima (avisos, meteorología, socorro)",
+      "SART: respondedor de radar"
+    ]
+  },
+  {
+    "unit": 3,
+    "enunciado": "La estabilidad de un barco es positiva cuando:",
+    "verdict": "publish",
+    "citas": [
+      "si el metacentro M queda por encima de G, el par formado devuelve el barco a la vertical (estabilidad positiva)",
+      "Si G sube por encima de M, el barco es inestable"
+    ]
+  },
+  {
+    "unit": 3,
+    "enunciado": "Quedar de costado (atravesado) a la mar con temporal es peligroso porque:",
+    "verdict": "publish",
+    "citas": ["quedar de costado (de través) a la mar es la situación más peligrosa, pues aumenta la escora y el riesgo de vuelco"]
+  },
+  {
+    "unit": 4,
+    "enunciado": "Las embarcaciones de eslora ≤ 12 m con marcado CE y uso privado:",
+    "verdict": "publish",
+    "citas": ["las embarcaciones de eslora ≤ 12 m con marcado CE de uso privado están exentas de matrícula"]
+  },
+  {
+    "unit": 4,
+    "enunciado": "La zona 5 de navegación permite alejarse hasta:",
+    "verdict": "publish",
+    "citas": [
+      "Zona 5: hasta 5 millas de un abrigo o playa accesible",
+      "la playa no se considera lugar de abrigo"
+    ]
+  },
+  {
+    "unit": 4,
+    "enunciado": "Según MARPOL, las basuras y restos de comida desmenuzados (criba < 25 mm) pueden verterse:",
+    "verdict": "publish",
+    "citas": [
+      "Basuras/restos de comida desmenuzados (criba < 25 mm): a más de 12 millas (el Mediterráneo es zona especial)",
+      "prohibición total de verter plásticos"
+    ]
+  },
+  {
+    "unit": 4,
+    "enunciado": "El seguro de responsabilidad civil de las embarcaciones de recreo lo regula:",
+    "verdict": "publish",
+    "citas": ["Seguro obligatorio de responsabilidad civil: regulado por el RD 607/1999"]
+  },
+  {
+    "unit": 5,
+    "enunciado": "En la región A, entrando a puerto, la marca lateral verde cónica se deja por:",
+    "verdict": "publish",
+    "citas": ["Estribor: color verde, forma cónica con vértice arriba, tope cónico verde, luz verde. Entrando a puerto se deja a estribor"]
+  },
+  {
+    "unit": 5,
+    "enunciado": "La luz de una marca cardinal es siempre de color:",
+    "verdict": "publish",
+    "citas": ["y su luz es siempre blanca"]
+  },
+  {
+    "unit": 5,
+    "enunciado": "Una marca cardinal Este emite luz:",
+    "verdict": "publish",
+    "citas": ["Este: conos opuestos por la base", "Luz Q(3) o VQ(3)"]
+  },
+  {
+    "unit": 5,
+    "enunciado": "El destello largo que sigue al grupo de 6 de la cardinal Sur sirve para:",
+    "verdict": "publish",
+    "citas": ["El destello largo del Sur evita confundir el grupo de 6 con el de 9"]
+  },
+  {
+    "unit": 5,
+    "enunciado": "La marca lateral modificada de bifurcación (canal principal) tiene luz:",
+    "verdict": "publish",
+    "citas": ["marca lateral modificada con una banda ancha del color contrario; luz de grupo de dos más uno, Gp(2+1)"]
+  },
+  {
+    "unit": 5,
+    "enunciado": "La marca de nuevo peligro puede llevar un racon codificado con la letra Morse:",
+    "verdict": "publish",
+    "citas": ["puede llevar un racon codificado con la letra Morse \"D\""]
+  },
+  {
+    "unit": 5,
+    "enunciado": "El sentido convencional del balizamiento es el de:",
+    "verdict": "publish",
+    "citas": ["El sentido convencional del balizamiento es el de un navegante que llega de alta mar y entra a puerto"]
+  },
+  {
+    "unit": 5,
+    "enunciado": "Una luz isofase se caracteriza por tener:",
+    "verdict": "publish",
+    "citas": ["isofase (Iso) (igual luz que oscuridad)", "destellos (Fl/D) (más oscuridad que luz)", "ocultaciones (Oc) (más luz que oscuridad)"]
+  },
+  {
+    "unit": 6,
+    "enunciado": "Un velero navegando a vela con el motor en marcha se considera:",
+    "verdict": "publish",
+    "citas": ["un velero con el motor en marcha es de propulsión mecánica"]
+  },
+  {
+    "unit": 6,
+    "enunciado": "En un canal angosto se debe navegar:",
+    "verdict": "publish",
+    "citas": ["Regla 9 (canales angostos): navegar lo más cerca posible del límite de estribor"]
+  },
+  {
+    "unit": 6,
+    "enunciado": "Un dispositivo de separación de tráfico se cruza:",
+    "verdict": "publish",
+    "citas": ["navegar en el sentido de la vía y cruzarla en ángulo recto"]
+  },
+  {
+    "unit": 6,
+    "enunciado": "De noche, el buque alcanzado muestra al que le alcanza:",
+    "verdict": "publish",
+    "citas": ["de noche solo ve su luz de alcance", "luz de alcance 135°"]
+  },
+  {
+    "unit": 6,
+    "enunciado": "Un pesquero con artes distintas del arrastre exhibe luces todo horizonte:",
+    "verdict": "publish",
+    "citas": ["arrastre = verde sobre blanca todo horizonte; otras artes = roja sobre blanca"]
+  },
+  {
+    "unit": 6,
+    "enunciado": "Un buque práctico en servicio exhibe luces todo horizonte:",
+    "verdict": "publish",
+    "citas": ["Regla 29 (práctico): blanca sobre roja todo horizonte"]
+  },
+  {
+    "unit": 6,
+    "enunciado": "Un dragaminas exhibe:",
+    "verdict": "publish",
+    "citas": [
+      "el dragaminas = tres verdes en triángulo",
+      "Regla 28 (restringido por su calado): tres rojas todo horizonte en vertical",
+      "maniobra restringida = rojo-blanco-rojo"
+    ]
+  },
+  {
+    "unit": 6,
+    "enunciado": "En visibilidad reducida, un buque fondeado hace sonar:",
+    "verdict": "publish",
+    "citas": ["fondeado = repique de campana de 5 s cada ≤ 1 min"]
+  },
+  {
+    "unit": 6,
+    "enunciado": "En un canal angosto, la intención de adelantar por estribor del alcanzado se señala con:",
+    "verdict": "publish",
+    "citas": [
+      "adelantar por estribor = dos largas + una corta, por babor = dos largas + dos cortas",
+      "conformidad del alcanzado = larga-corta-larga-corta"
+    ]
+  },
+  {
+    "unit": 6,
+    "enunciado": "Un buque varado exhibe de día:",
+    "verdict": "publish",
+    "citas": [
+      "de día tres bolas negras en vertical",
+      "fondeado = una blanca todo horizonte (de día una bola negra a proa",
+      "dos conos unidos por los vértices (pesca)"
+    ]
+  },
+  {
+    "unit": 7,
+    "enunciado": "La arrancada de un buque es:",
+    "verdict": "publish",
+    "citas": ["La arrancada es la inercia del barco aunque la máquina esté parada"]
+  },
+  {
+    "unit": 7,
+    "enunciado": "Gobernando con caña, la proa cae:",
+    "verdict": "publish",
+    "citas": ["Con caña, la proa cae hacia el lado contrario al que se mete la caña"]
+  },
+  {
+    "unit": 7,
+    "enunciado": "En el abarloamiento a otra embarcación, los largos se dan:",
+    "verdict": "publish",
+    "citas": ["los largos van al muelle y esprines/traveses al otro barco"]
+  },
+  {
+    "unit": 7,
+    "enunciado": "La aproximación final a un hombre al agua se hace:",
+    "verdict": "publish",
+    "citas": ["Aproximación y recogida por sotavento para no arrollarlo"]
+  },
+  {
+    "unit": 8,
+    "enunciado": "El agente extintor más adecuado para un cuadro eléctrico es:",
+    "verdict": "hold",
+    "citas": ["CO₂ (B/C, ideal para cuadros eléctricos porque no deja residuo)"],
+    "motivo": "La respuesta correcta (CO₂) y su porqué están respaldados por UT8.4, pero la explicación añade que \"el agua y la espuma son conductoras\", afirmación que NO aparece en el manual. Propuesta: recortar la explicación a \"El CO₂ es ideal para cuadros eléctricos porque no deja residuo (UT8.4)\" y publicar."
+  },
+  {
+    "unit": 8,
+    "enunciado": "La posición HELP en el agua sirve para:",
+    "verdict": "publish",
+    "citas": ["adoptar la posición HELP (encogido, reduciendo la pérdida de calor)"]
+  },
+  {
+    "unit": 8,
+    "enunciado": "Ante una vía de agua, la primera actuación es:",
+    "verdict": "publish",
+    "citas": ["Localizar el origen, taponar (espiches de madera, cuñas, colchonetas, tapabocas), achicar", "Cerrar los grifos de fondo cercanos"]
+  },
+  {
+    "unit": 9,
+    "enunciado": "El viento del NW procede del:",
+    "verdict": "publish",
+    "citas": ["viento del NW = procedente del noroeste"]
+  },
+  {
+    "unit": 9,
+    "enunciado": "La niebla de advección se forma por:",
+    "verdict": "publish",
+    "citas": [
+      "de advección (aire cálido y húmedo desplazándose sobre agua fría)",
+      "de radiación (por enfriamiento nocturno del suelo"
+    ]
+  },
+  {
+    "unit": 9,
+    "enunciado": "La mar de fondo (o tendida) consiste en:",
+    "verdict": "publish",
+    "citas": ["mar de fondo o tendida (olas largas y regulares generadas por un temporal lejano)"]
+  },
+  {
+    "unit": 10,
+    "enunciado": "La marcación de un objeto se mide respecto a:",
+    "verdict": "publish",
+    "citas": ["Marcación: dirección a un objeto respecto a la línea proa-popa (positiva a estribor, negativa a babor)"]
+  },
+  {
+    "unit": 10,
+    "enunciado": "El rumbo de aguja a partir del verdadero se obtiene con:",
+    "verdict": "publish",
+    "citas": ["Ra = Rv − Ct (rumbo de aguja a partir del verdadero)"]
+  },
+  {
+    "unit": 10,
+    "enunciado": "La longitud geográfica se mide de 0° a:",
+    "verdict": "publish",
+    "citas": ["Longitud: de 0° a 180° E/W, medida desde Greenwich", "Latitud: de 0° a 90° N/S, medida desde el ecuador"]
+  },
+  {
+    "unit": 11,
+    "enunciado": "Con la carta L105 (dm 2°50'W en 2005, variación 7'E anual), la dm para 2015 es aproximadamente:",
+    "verdict": "publish",
+    "citas": ["dm(2026) = 2°50'W − 2°27' = 0°23'W ≈ 0,5°W (redondeado al medio grado)"]
+  },
+  {
+    "unit": 11,
+    "enunciado": "Con dm = 1°W y desvío Δ = 3°E, la corrección total es:",
+    "verdict": "publish",
+    "citas": ["Ct = dm + Δ = −0,5° + 3° = +2,5°"]
+  },
+  {
+    "unit": 11,
+    "enunciado": "Con Ct = −4° y Ra = 090°, el rumbo verdadero es:",
+    "verdict": "publish",
+    "citas": ["Rv = Ra + Ct = 124°"]
+  },
+  {
+    "unit": 11,
+    "enunciado": "Navegando a Rv = 200° observamos un faro con marcación 45° por babor. Su demora verdadera es:",
+    "verdict": "publish",
+    "citas": ["Dv = Rv + marcación (estribor +, babor −)"]
+  },
+  {
+    "unit": 11,
+    "enunciado": "Para recorrer 20 millas a 8 nudos se necesitan:",
+    "verdict": "publish",
+    "citas": ["HRB (llegada) = HRA (salida) + distancia/velocidad"]
+  },
+  {
+    "unit": 11,
+    "enunciado": "Salimos a las 10:00 hacia un punto a 18 millas navegando a 6 nudos. La hora de llegada es:",
+    "verdict": "publish",
+    "citas": ["HRB (llegada) = HRA (salida) + distancia/velocidad"]
+  },
+  {
+    "unit": 11,
+    "enunciado": "La corrección total obtenida por enfilación se calcula como:",
+    "verdict": "hold",
+    "citas": [],
+    "motivo": "La fórmula (Ct = Dv de la carta − Da observada) es correcta, pero su único respaldo textual está en UT10.5; la lista de ejercicios de examen de UT11 (§11.1) incluye la situación por enfilación y demora, no el cálculo de Ct por enfilación. Decidir: reasignarla a UT10 (donde sí hay respaldo) o mantenerla en UT11 por afinidad con la carta."
+  },
+  {
+    "unit": 11,
+    "enunciado": "Para situarse por enfilación y demora se necesita:",
+    "verdict": "publish",
+    "citas": ["Situación por enfilación y demora"]
+  }
+]
