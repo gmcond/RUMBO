@@ -259,9 +259,8 @@
   {
     "unit": 8,
     "enunciado": "El agente extintor más adecuado para un cuadro eléctrico es:",
-    "verdict": "hold",
-    "citas": ["CO₂ (B/C, ideal para cuadros eléctricos porque no deja residuo)"],
-    "motivo": "La respuesta correcta (CO₂) y su porqué están respaldados por UT8.4, pero la explicación añade que \"el agua y la espuma son conductoras\", afirmación que NO aparece en el manual. Propuesta: recortar la explicación a \"El CO₂ es ideal para cuadros eléctricos porque no deja residuo (UT8.4)\" y publicar."
+    "verdict": "publish",
+    "citas": ["ideal para cuadros eléctricos porque no deja residuo"]
   },
   {
     "unit": 8,
@@ -351,11 +350,10 @@
     "citas": ["HRB (llegada) = HRA (salida) + distancia/velocidad"]
   },
   {
-    "unit": 11,
+    "unit": 10,
     "enunciado": "La corrección total obtenida por enfilación se calcula como:",
-    "verdict": "hold",
-    "citas": [],
-    "motivo": "La fórmula (Ct = Dv de la carta − Da observada) es correcta, pero su único respaldo textual está en UT10.5; la lista de ejercicios de examen de UT11 (§11.1) incluye la situación por enfilación y demora, no el cálculo de Ct por enfilación. Decidir: reasignarla a UT10 (donde sí hay respaldo) o mantenerla en UT11 por afinidad con la carta."
+    "verdict": "publish",
+    "citas": ["Cálculo de Ct por enfilación: Ct = demora verdadera (medida en la carta sobre la enfilación) − demora de aguja (observada con el compás)"]
   },
   {
     "unit": 11,
