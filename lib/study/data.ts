@@ -79,6 +79,36 @@ export function shuffleOptions(opciones: string[]): { opciones: string[]; map: n
   return { opciones: indices.map((i) => opciones[i]), map: indices };
 }
 
+/**
+ * Último resultado registrado por pregunta en los attempts del usuario
+ * (para los filtros "falladas" y "no vistas" del configurador de tests).
+ */
+export async function getLastAnswerMap(supabase: ServerSupabase): Promise<Map<string, boolean>> {
+  const { data, error } = await supabase
+    .from("attempts")
+    .select("respuestas, created_at")
+    .order("created_at", { ascending: true });
+  if (error) throw new Error(`attempts: ${error.message}`);
+
+  const last = new Map<string, boolean>();
+  for (const attempt of data ?? []) {
+    if (!Array.isArray(attempt.respuestas)) continue;
+    for (const r of attempt.respuestas) {
+      if (
+        r !== null &&
+        typeof r === "object" &&
+        "question_id" in r &&
+        typeof r.question_id === "string" &&
+        "ok" in r &&
+        typeof r.ok === "boolean"
+      ) {
+        last.set(r.question_id, r.ok);
+      }
+    }
+  }
+  return last;
+}
+
 /** Elige n preguntas publicadas al azar de una unidad, listas para mostrar. */
 export async function pickQuizQuestions(
   supabase: ServerSupabase,
