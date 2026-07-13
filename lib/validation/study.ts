@@ -37,5 +37,14 @@ export const testConfigSchema = z.object({
   filtro: z.enum(["todas", "falladas", "no-vistas"]),
 });
 
+/** hotspots jsonb de diagrams: [{id, termino, definicion}]. */
+export const hotspotsSchema = z.array(
+  z.object({
+    id: z.string().min(1),
+    termino: z.string().min(1),
+    definicion: z.string().min(1),
+  })
+);
+
 export type Answer = z.infer<typeof answerSchema>;
 export type TestConfig = z.infer<typeof testConfigSchema>;

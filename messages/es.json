@@ -97,6 +97,15 @@
       "prev": "Anterior",
       "next": "Siguiente",
       "backToUnit": "Volver a la unidad"
+    },
+    "diagram": {
+      "explore": "Explorar",
+      "game": "Juego",
+      "exploreHint": "Toca una parte del dibujo para ver su nombre y definición.",
+      "prompt": "Toca:",
+      "score": "{done} de {total}",
+      "finished": "Has acertado {ok} de {total} a la primera.",
+      "playAgain": "Jugar otra vez"
     }
   },
   "admin": {

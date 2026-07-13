@@ -1,0 +1,78 @@
+<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vista lateral del casco de una embarcación">
+  <!-- Diagrama propio de RUMBO (F1). Las zonas interactivas llevan id de hotspot. -->
+  <style>
+    .deco, .water { pointer-events: none; }
+    .hotspot { cursor: pointer; transition: fill-opacity .15s ease; }
+    .hotspot:focus-visible { outline: 2px solid var(--primary, #0ea5e9); outline-offset: 2px; }
+    .zone { fill: transparent; fill-opacity: 0; stroke: none; }
+    .zone:hover { fill: var(--primary, #0ea5e9); fill-opacity: .16; }
+    .zone.is-active { fill: var(--primary, #0ea5e9); fill-opacity: .32; }
+    .zone.is-hit { fill: #10b981; fill-opacity: .42; }
+    .zone.is-error { fill: #ef4444; fill-opacity: .42; }
+    .line-zone .vis { stroke: var(--muted-foreground, #64748b); fill: var(--muted-foreground, #64748b); transition: stroke .15s ease; }
+    .line-zone:hover .vis, .line-zone.is-active .vis { stroke: var(--primary, #0ea5e9); fill: var(--primary, #0ea5e9); }
+    .line-zone.is-hit .vis { stroke: #10b981; fill: #10b981; }
+    .line-zone.is-error .vis { stroke: #ef4444; fill: #ef4444; }
+    .hit { stroke: transparent; fill: none; stroke-width: 26; pointer-events: stroke; }
+    .hull-outline { fill: var(--card, #f8fafc); stroke: var(--foreground, #0f172a); stroke-width: 2.5; }
+    .hull-under { fill: #0ea5e9; fill-opacity: .1; }
+    .sep { stroke: var(--muted-foreground, #94a3b8); stroke-width: 1; stroke-dasharray: 3 5; opacity: .7; }
+    .waterline-vis { stroke: #0ea5e9; stroke-width: 3; stroke-dasharray: 9 6; fill: none; }
+  </style>
+
+  <!-- agua -->
+  <rect class="water" x="0" y="280" width="800" height="170" fill="#0ea5e9" fill-opacity=".07" />
+
+  <!-- casco base (decorativo) -->
+  <path class="deco hull-outline" d="M150,195 C300,182 520,170 672,168 L652,280 L622,296 C550,315 420,326 240,318 L168,306 Z" />
+  <path class="deco hull-under" d="M652,280 L622,296 C550,315 420,326 240,318 L168,306 L152,280 Z" />
+  <!-- caseta y parabrisas (decorativos) -->
+  <path class="deco" d="M310,193 L316,158 L432,150 L462,190 Z" fill="var(--muted, #e2e8f0)" stroke="var(--foreground, #0f172a)" stroke-width="2" />
+  <line class="deco" x1="418" y1="152" x2="446" y2="188" stroke="var(--foreground, #0f172a)" stroke-width="2" />
+  <!-- separadores de zonas del costado (decorativos) -->
+  <line class="deco sep" x1="210" y1="192" x2="210" y2="280" />
+  <line class="deco sep" x1="290" y1="188" x2="290" y2="280" />
+  <line class="deco sep" x1="520" y1="173" x2="520" y2="280" />
+  <line class="deco sep" x1="600" y1="171" x2="600" y2="280" />
+
+  <!-- zonas del casco -->
+  <path id="obra-muerta" class="hotspot zone" d="M150,195 C300,182 520,170 672,168 L652,280 L152,280 Z" />
+  <path id="obra-viva" class="hotspot zone" d="M652,280 L622,296 C550,315 420,326 240,318 L168,306 L152,280 Z" />
+  <path id="popa" class="hotspot zone" d="M150,195 L210,192 L210,280 L152,280 Z" />
+  <path id="aleta" class="hotspot zone" d="M210,192 L290,188 L290,280 L210,280 Z" />
+  <path id="amura" class="hotspot zone" d="M520,173 L600,171 L600,280 L520,280 Z" />
+  <path id="proa" class="hotspot zone" d="M600,171 L672,168 L652,280 L600,280 Z" />
+
+  <!-- piezas estructurales -->
+  <g id="quilla" class="hotspot line-zone">
+    <path class="vis" d="M168,306 L240,318 C420,326 550,315 622,296" fill="none" stroke-width="7" stroke-linecap="round" />
+    <path class="hit" d="M168,306 L240,318 C420,326 550,315 622,296" />
+  </g>
+  <g id="roda" class="hotspot line-zone">
+    <path class="vis" d="M622,296 L652,280 L672,168" fill="none" stroke-width="7" stroke-linecap="round" />
+    <path class="hit" d="M622,296 L652,280 L672,168" />
+  </g>
+  <g id="codaste" class="hotspot line-zone">
+    <path class="vis" d="M168,306 L152,280 L150,232" fill="none" stroke-width="7" stroke-linecap="round" />
+    <path class="hit" d="M168,306 L152,280 L150,232" />
+  </g>
+
+  <!-- gobierno y propulsión -->
+  <g id="timon" class="hotspot line-zone">
+    <path class="vis" d="M198,308 L220,310 L215,358 L193,354 Z" stroke-width="2" />
+    <path class="hit" d="M198,308 L220,310 L215,358 L193,354 Z" />
+  </g>
+  <g id="helice" class="hotspot line-zone">
+    <path class="vis" d="M240,318 L252,322" fill="none" stroke-width="4" stroke-linecap="round" />
+    <ellipse class="vis" cx="252" cy="308" rx="6" ry="14" stroke-width="2" transform="rotate(12 252 308)" />
+    <ellipse class="vis" cx="252" cy="338" rx="6" ry="14" stroke-width="2" transform="rotate(-12 252 338)" />
+    <circle class="vis" cx="252" cy="323" r="4.5" stroke-width="2" />
+    <circle class="hit" cx="252" cy="323" r="24" />
+  </g>
+
+  <!-- línea de flotación (encima de todo) -->
+  <g id="linea-flotacion" class="hotspot line-zone">
+    <line class="vis waterline-vis" x1="92" y1="280" x2="728" y2="280" />
+    <line class="hit" x1="92" y1="280" x2="728" y2="280" />
+  </g>
+</svg>

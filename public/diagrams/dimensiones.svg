@@ -1,0 +1,79 @@
+<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dimensiones de una embarcación: sección transversal y vista lateral">
+  <!-- Diagrama propio de RUMBO (F1). Las cotas interactivas llevan id de hotspot. -->
+  <style>
+    .deco, .water { pointer-events: none; }
+    .hotspot { cursor: pointer; }
+    .hotspot:focus-visible { outline: 2px solid var(--primary, #0ea5e9); outline-offset: 2px; }
+    .line-zone .vis { stroke: var(--muted-foreground, #64748b); fill: var(--muted-foreground, #64748b); transition: stroke .15s ease; }
+    .line-zone:hover .vis, .line-zone.is-active .vis { stroke: var(--primary, #0ea5e9); fill: var(--primary, #0ea5e9); }
+    .line-zone.is-hit .vis { stroke: #10b981; fill: #10b981; }
+    .line-zone.is-error .vis { stroke: #ef4444; fill: #ef4444; }
+    .hit { stroke: transparent; fill: none; stroke-width: 30; pointer-events: stroke; }
+    .hull-outline { fill: var(--card, #f8fafc); stroke: var(--foreground, #0f172a); stroke-width: 2.5; }
+    .hull-under { fill: #0ea5e9; fill-opacity: .1; }
+    .guide { stroke: var(--muted-foreground, #94a3b8); stroke-width: 1; stroke-dasharray: 3 5; opacity: .8; }
+    .waterline-vis { stroke: #0ea5e9; stroke-width: 3; stroke-dasharray: 9 6; fill: none; }
+  </style>
+
+  <!-- ══ Sección transversal (izquierda) ══ -->
+  <!-- casco en U (decorativo) -->
+  <path class="deco hull-outline" d="M120,150 C118,255 150,318 240,330 C330,318 362,255 360,150 Z" />
+  <path class="deco hull-under" d="M124,255 C136,300 175,322 240,330 C305,322 344,300 356,255 Z" />
+  <line class="deco" x1="120" y1="150" x2="360" y2="150" stroke="var(--foreground, #0f172a)" stroke-width="2.5" />
+  <!-- línea de flotación (decorativa aquí) -->
+  <line class="deco waterline-vis" x1="70" y1="255" x2="410" y2="255" />
+
+  <!-- líneas de referencia de las cotas -->
+  <line class="deco guide" x1="120" y1="150" x2="120" y2="118" />
+  <line class="deco guide" x1="360" y1="150" x2="360" y2="118" />
+  <line class="deco guide" x1="360" y1="150" x2="404" y2="150" />
+  <line class="deco guide" x1="240" y1="330" x2="404" y2="330" />
+  <line class="deco guide" x1="120" y1="150" x2="76" y2="150" />
+  <line class="deco guide" x1="70" y1="255" x2="76" y2="255" />
+
+  <!-- manga: anchura máxima -->
+  <g id="manga" class="hotspot line-zone">
+    <line class="vis" x1="120" y1="128" x2="360" y2="128" stroke-width="2.5" />
+    <polygon class="vis" points="120,128 132,122 132,134" />
+    <polygon class="vis" points="360,128 348,122 348,134" />
+    <line class="hit" x1="120" y1="128" x2="360" y2="128" />
+  </g>
+
+  <!-- puntal: de quilla a cubierta -->
+  <g id="puntal" class="hotspot line-zone">
+    <line class="vis" x1="396" y1="150" x2="396" y2="330" stroke-width="2.5" />
+    <polygon class="vis" points="396,150 390,162 402,162" />
+    <polygon class="vis" points="396,330 390,318 402,318" />
+    <line class="hit" x1="396" y1="150" x2="396" y2="330" />
+  </g>
+
+  <!-- francobordo: de flotación a cubierta -->
+  <g id="francobordo" class="hotspot line-zone">
+    <line class="vis" x1="88" y1="150" x2="88" y2="255" stroke-width="2.5" />
+    <polygon class="vis" points="88,150 82,162 94,162" />
+    <polygon class="vis" points="88,255 82,243 94,243" />
+    <line class="hit" x1="88" y1="150" x2="88" y2="255" />
+  </g>
+
+  <!-- calado: de flotación al punto más bajo de la quilla -->
+  <g id="calado" class="hotspot line-zone">
+    <line class="vis" x1="240" y1="255" x2="240" y2="330" stroke-width="2.5" />
+    <polygon class="vis" points="240,255 234,267 246,267" />
+    <polygon class="vis" points="240,330 234,318 246,318" />
+    <line class="hit" x1="240" y1="255" x2="240" y2="330" />
+  </g>
+
+  <!-- ══ Vista lateral (derecha) para la eslora ══ -->
+  <path class="deco hull-outline" d="M498,240 C560,228 690,222 748,232 L738,296 C660,310 560,308 510,296 Z" />
+  <line class="deco waterline-vis" x1="472" y1="282" x2="778" y2="282" />
+  <line class="deco guide" x1="498" y1="240" x2="498" y2="352" />
+  <line class="deco guide" x1="748" y1="232" x2="748" y2="352" />
+
+  <!-- eslora: longitud de proa a popa -->
+  <g id="eslora" class="hotspot line-zone">
+    <line class="vis" x1="498" y1="340" x2="748" y2="340" stroke-width="2.5" />
+    <polygon class="vis" points="498,340 510,334 510,346" />
+    <polygon class="vis" points="748,340 736,334 736,346" />
+    <line class="hit" x1="498" y1="340" x2="748" y2="340" />
+  </g>
+</svg>
