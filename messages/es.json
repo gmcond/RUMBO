@@ -219,7 +219,11 @@
       "correctAnswer": "Correcta:",
       "explanation": "Explicación:",
       "newSimulacro": "Nuevo simulacro",
-      "backToPanel": "Volver al panel"
+      "backToPanel": "Volver al panel",
+      "historyTitle": "Histórico de simulacros",
+      "historyEmpty": "Aún no has hecho ningún simulacro en modo examen.",
+      "historyChartLabel": "Evolución de aciertos en tus simulacros",
+      "historyMinLabel": "mínimo {count}"
     }
   },
   "admin": {

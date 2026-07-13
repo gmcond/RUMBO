@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { AlertTriangle, Clock, ListChecks, Target } from "lucide-react";
 
+import {
+  SimulacroHistoryChart,
+  type SimulacroHistoryPoint,
+} from "@/components/study/simulacro-history-chart";
 import { SimulacroResumeBanner } from "@/components/study/simulacro-resume-banner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,12 +31,17 @@ export default async function SimulacroPage() {
   const degree = await getDegree(supabase, "per");
   if (!degree) return null;
 
-  const [{ data: configs, error }, profileCcaa] = await Promise.all([
+  const [{ data: configs, error }, { data: simulacros }, profileCcaa] = await Promise.all([
     supabase
       .from("exam_configs")
       .select("id, ccaa, num_preguntas, duracion_min, min_aciertos, topes")
       .eq("degree_id", degree.id)
       .order("ccaa"),
+    supabase
+      .from("attempts")
+      .select("id, aciertos, veredicto, respuestas, duracion_seg, created_at")
+      .eq("tipo", "simulacro")
+      .order("created_at", { ascending: true }),
     (async () => {
       const {
         data: { user },
@@ -53,10 +62,25 @@ export default async function SimulacroPage() {
   }
 
   // Por defecto: la comunidad del perfil si tiene config; si no, Cataluña.
-  const defaultCcaa =
-    configs.find((c) => c.ccaa === profileCcaa)?.ccaa ??
-    configs.find((c) => c.ccaa === "CAT")?.ccaa ??
-    configs[0].ccaa;
+  const defaultConfig =
+    configs.find((c) => c.ccaa === profileCcaa) ??
+    configs.find((c) => c.ccaa === "CAT") ??
+    configs[0];
+  const defaultCcaa = defaultConfig.ccaa;
+
+  const points: SimulacroHistoryPoint[] = (simulacros ?? []).map((s) => ({
+    date: s.created_at,
+    aciertos: s.aciertos,
+    total: Array.isArray(s.respuestas) ? s.respuestas.length : 0,
+    veredicto: s.veredicto,
+  }));
+  const recent = [...(simulacros ?? [])].reverse().slice(0, 10);
+  const listFormat = new Intl.DateTimeFormat("es-ES", {
+    day: "2-digit",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   return (
     <div className="flex flex-col gap-6">
@@ -160,6 +184,55 @@ export default async function SimulacroPage() {
           {t("start")}
         </Button>
       </form>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">{t("historyTitle")}</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          {points.length === 0 ? (
+            <p className="text-muted-foreground text-sm">{t("historyEmpty")}</p>
+          ) : (
+            <>
+              {points.length >= 2 && (
+                <SimulacroHistoryChart points={points} minAciertos={defaultConfig.min_aciertos} />
+              )}
+              <ul className="divide-y">
+                {recent.map((s) => {
+                  const total = Array.isArray(s.respuestas) ? s.respuestas.length : 0;
+                  const apto = s.veredicto === "APTO";
+                  return (
+                    <li key={s.id} className="flex items-center gap-3 py-2.5 text-sm">
+                      <span className="text-muted-foreground w-28 shrink-0 text-xs">
+                        {listFormat.format(new Date(s.created_at))}
+                      </span>
+                      <span className="font-medium tabular-nums">
+                        {s.aciertos}/{total}
+                      </span>
+                      {s.duracion_seg !== null && (
+                        <span className="text-muted-foreground flex items-center gap-1 text-xs">
+                          <Clock className="size-3.5" aria-hidden />
+                          {Math.round(s.duracion_seg / 60)} min
+                        </span>
+                      )}
+                      <Badge
+                        variant="outline"
+                        className={
+                          apto
+                            ? "ml-auto border-emerald-500/60 text-emerald-700 dark:text-emerald-400"
+                            : "ml-auto border-red-500/60 text-red-700 dark:text-red-400"
+                        }
+                      >
+                        {apto ? t("apto") : t("noApto")}
+                      </Badge>
+                    </li>
+                  );
+                })}
+              </ul>
+            </>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

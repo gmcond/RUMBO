@@ -219,7 +219,11 @@
       "correctAnswer": "Correcta:",
       "explanation": "Explicació:",
       "newSimulacro": "Nou simulacre",
-      "backToPanel": "Torna al tauler"
+      "backToPanel": "Torna al tauler",
+      "historyTitle": "Històric de simulacres",
+      "historyEmpty": "Encara no has fet cap simulacre en mode examen.",
+      "historyChartLabel": "Evolució d'encerts als teus simulacres",
+      "historyMinLabel": "mínim {count}"
     }
   },
   "admin": {
