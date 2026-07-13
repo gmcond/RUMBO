@@ -106,6 +106,29 @@
       "score": "{done} de {total}",
       "finished": "Has acertado {ok} de {total} a la primera.",
       "playAgain": "Jugar otra vez"
+    },
+    "flashcards": {
+      "title": "Flashcards",
+      "subtitle": "Repaso diario con repetición espaciada (SM-2).",
+      "failsDeck": "Mis fallos",
+      "failsDeckHint": "Preguntas que has fallado en quizzes y tests.",
+      "due": "{count, plural, =0 {al día} one {# vencida} other {# vencidas}}",
+      "newAvailable": "{count} nuevas",
+      "cards": "{count} tarjetas",
+      "study": "Repasar",
+      "emptyDeck": "No hay tarjetas vencidas ni nuevas en este mazo. ¡Todo al día!",
+      "emptyFails": "No tienes fallos pendientes de repasar.",
+      "showAnswer": "Mostrar respuesta",
+      "again": "Otra vez",
+      "hard": "Difícil",
+      "good": "Bien",
+      "easy": "Fácil",
+      "mnemonic": "Mnemotecnia",
+      "explanation": "Explicación",
+      "progress": "{done} de {total}",
+      "sessionDone": "Sesión completada: {total} tarjetas repasadas.",
+      "backToDecks": "Volver a los mazos",
+      "error": "No se pudo guardar el repaso. Inténtalo de nuevo."
     }
   },
   "admin": {
