@@ -2,15 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { BookOpen, Layers, ListChecks } from "lucide-react";
+import { BookOpen, Compass, Layers, ListChecks, Timer } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { parseTopes, type UnitBreakdown } from "@/lib/exam-grading";
 import { getDegree, getUnitsForDegree } from "@/lib/study/data";
+import { computeReadiness } from "@/lib/study/readiness";
 import { getUserCards, isDue } from "@/lib/study/srs-queue";
 import { createClient } from "@/lib/supabase/server";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Estudio" };
 
@@ -20,16 +23,18 @@ export default async function StudyPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  let profileCcaa: string | null = null;
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("nombre, onboarding_completado")
+      .select("nombre, onboarding_completado, ccaa_objetivo")
       .eq("user_id", user.id)
       .maybeSingle();
 
     if (profile && !profile.onboarding_completado) {
       redirect("/onboarding");
     }
+    profileCcaa = profile?.ccaa_objetivo ?? null;
   }
 
   const t = await getTranslations("study");
@@ -42,7 +47,14 @@ export default async function StudyPage() {
   const units = await getUnitsForDegree(supabase, degree.id);
   const unitIds = units.map((u) => u.id);
 
-  const [{ data: lessons }, { data: progress }, cards, { data: attempts }] = await Promise.all([
+  const [
+    { data: lessons },
+    { data: progress },
+    cards,
+    { data: attempts },
+    { data: simulacros },
+    { data: examConfigs },
+  ] = await Promise.all([
     supabase.from("lessons").select("id, unit_id").in("unit_id", unitIds),
     supabase.from("lesson_progress").select("lesson_id"),
     getUserCards(supabase),
@@ -52,7 +64,30 @@ export default async function StudyPage() {
       .eq("tipo", "test")
       .order("created_at", { ascending: false })
       .limit(5),
+    supabase
+      .from("attempts")
+      .select("aciertos, desglose_por_ut")
+      .eq("tipo", "simulacro")
+      .order("created_at", { ascending: false })
+      .limit(3),
+    supabase.from("exam_configs").select("ccaa, min_aciertos, topes").eq("degree_id", degree.id),
   ]);
+
+  // Semáforo: config de la comunidad del perfil (o Cataluña) + últimos 3 simulacros.
+  const examConfig =
+    examConfigs?.find((c) => c.ccaa === profileCcaa) ??
+    examConfigs?.find((c) => c.ccaa === "CAT") ??
+    examConfigs?.[0] ??
+    null;
+  const readiness = examConfig
+    ? computeReadiness(
+        (simulacros ?? []).map((s) => ({
+          aciertos: s.aciertos,
+          desglosePorUt: (s.desglose_por_ut ?? {}) as Record<string, UnitBreakdown>,
+        })),
+        { minAciertos: examConfig.min_aciertos, topes: parseTopes(examConfig.topes) }
+      )
+    : [];
 
   const completedIds = new Set((progress ?? []).map((p) => p.lesson_id));
   const byUnit = new Map<string, { total: number; completed: number }>();
@@ -125,7 +160,87 @@ export default async function StudyPage() {
             </Button>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Timer className="text-muted-foreground size-4" aria-hidden />
+              {t("simulacro.title")}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Button asChild size="sm" variant="outline" className="w-full">
+              <Link href="/estudio/simulacro">{t("panel.simulacroCta")}</Link>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Compass className="text-muted-foreground size-4" aria-hidden />
+              {t("carta.title")}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Button asChild size="sm" variant="outline" className="w-full">
+              <Link href="/estudio/carta">{t("panel.cartaCta")}</Link>
+            </Button>
+          </CardContent>
+        </Card>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">{t("readiness.title")}</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-3">
+          {readiness.length === 0 ? (
+            <>
+              <p className="text-muted-foreground text-sm">{t("readiness.empty")}</p>
+              <Button asChild size="sm" className="self-start">
+                <Link href="/estudio/simulacro">{t("readiness.emptyCta")}</Link>
+              </Button>
+            </>
+          ) : (
+            <>
+              <ul className="flex flex-col gap-2">
+                {readiness.map((row) => {
+                  const unitInfo =
+                    row.unit !== null ? units.find((u) => u.numero === row.unit) : null;
+                  return (
+                    <li key={row.unit ?? "global"} className="flex items-center gap-3">
+                      <span
+                        className={cn(
+                          "size-2.5 shrink-0 rounded-full",
+                          row.level === "green" && "bg-emerald-500",
+                          row.level === "amber" && "bg-amber-500",
+                          row.level === "red" && "bg-red-500"
+                        )}
+                        aria-hidden
+                      />
+                      <span className="sr-only">{t(`readiness.${row.level}`)}</span>
+                      <span className="min-w-0 truncate text-sm font-medium">
+                        {row.unit === null
+                          ? t("readiness.global")
+                          : `UT${row.unit}${unitInfo ? ` · ${unitInfo.titulo}` : ""}`}
+                      </span>
+                      <span className="text-muted-foreground ml-auto shrink-0 text-xs tabular-nums">
+                        {row.unit === null
+                          ? t("readiness.lastGlobal", { aciertos: row.lastValue, min: row.limit })
+                          : t("readiness.lastBlock", { fallos: row.lastValue, tope: row.limit })}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+              <p className="text-muted-foreground text-xs">
+                {t("readiness.basedOn", { count: Math.min(simulacros?.length ?? 0, 3) })}
+              </p>
+            </>
+          )}
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>

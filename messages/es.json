@@ -67,7 +67,21 @@
       "recentTitle": "Últimos tests",
       "noTests": "Aún no has hecho ningún test.",
       "testScore": "{aciertos}/{total} aciertos",
-      "empty": "Todavía no hay contenido sembrado. Ejecuta el seed para empezar."
+      "empty": "Todavía no hay contenido sembrado. Ejecuta el seed para empezar.",
+      "simulacroCta": "Hacer un simulacro",
+      "cartaCta": "Practicar carta"
+    },
+    "readiness": {
+      "title": "Preparación para el examen",
+      "empty": "Haz tu primer simulacro en modo examen para medir tu preparación por bloque eliminatorio.",
+      "emptyCta": "Hacer mi primer simulacro",
+      "global": "Mínimo global",
+      "lastGlobal": "{aciertos} aciertos (mín. {min}) en el último",
+      "lastBlock": "{fallos} fallos (máx. {tope}) en el último",
+      "basedOn": "{count, plural, one {Según tu último simulacro en modo examen} other {Según tus últimos # simulacros en modo examen}}",
+      "green": "Verde: vas bien",
+      "amber": "Ámbar: al límite",
+      "red": "Rojo: en riesgo"
     },
     "units": "Unidades teóricas",
     "eliminatory": "Eliminatoria",

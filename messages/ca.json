@@ -67,7 +67,21 @@
       "recentTitle": "Últims tests",
       "noTests": "Encara no has fet cap test.",
       "testScore": "{aciertos}/{total} encerts",
-      "empty": "Encara no hi ha contingut sembrat. Executa el seed per començar."
+      "empty": "Encara no hi ha contingut sembrat. Executa el seed per començar.",
+      "simulacroCta": "Fes un simulacre",
+      "cartaCta": "Practica la carta"
+    },
+    "readiness": {
+      "title": "Preparació per a l'examen",
+      "empty": "Fes el teu primer simulacre en mode examen per mesurar la teva preparació per bloc eliminatori.",
+      "emptyCta": "Fes el meu primer simulacre",
+      "global": "Mínim global",
+      "lastGlobal": "{aciertos} encerts (mín. {min}) a l'últim",
+      "lastBlock": "{fallos} errors (màx. {tope}) a l'últim",
+      "basedOn": "{count, plural, one {Segons el teu últim simulacre en mode examen} other {Segons els teus últims # simulacres en mode examen}}",
+      "green": "Verd: vas bé",
+      "amber": "Ambre: al límit",
+      "red": "Vermell: en risc"
     },
     "units": "Unitats teòriques",
     "eliminatory": "Eliminatòria",
