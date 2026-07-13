@@ -29,7 +29,10 @@ export default async function TestsPage({
     .from("questions")
     .select("unit_id")
     .eq("estado", "published")
-    .in("unit_id", units.map((u) => u.id));
+    .in(
+      "unit_id",
+      units.map((u) => u.id)
+    );
   const countByUnit = new Map<string, number>();
   for (const q of published ?? []) {
     countByUnit.set(q.unit_id, (countByUnit.get(q.unit_id) ?? 0) + 1);

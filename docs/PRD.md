@@ -137,6 +137,7 @@ Contenido organizado en **Titulación → Unidades Teóricas (UT) → Lecciones 
 - `lesson_progress` (user_id, lesson_id, completado_at)
 - `srs_cards` (user_id, concept_id/question_id, ease, interval_days, due_at, reps, lapses)
 - `attempts` (id, user_id, tipo enum[test|simulacro], exam_config_id, respuestas jsonb, aciertos, desglose_por_ut jsonb, veredicto, duracion, created_at)
+  - Shape fijado en F1 — `respuestas`: `[{question_id, unit, elegida: 0-3|null, correcta: 0-3, ok: bool}]`; `desglose_por_ut`: `{"<nºUT>": {aciertos, fallos, total}}`; `veredicto` es `null` en tipo `test` (se usa en simulacros, F2).
 
 **Información viva (M4/M5)**
 - `ccaa_info` (id, degree_id, ccaa, tasas jsonb, sedes jsonb, organismo, enlaces jsonb, particularidades_md, source_url, last_verified_at)
@@ -157,7 +158,16 @@ Contenido organizado en **Titulación → Unidades Teóricas (UT) → Lecciones 
 ## 7. Reglas de negocio críticas (no inventar: usar estas)
 
 1. **Corrección del simulacro (Cataluña):** APTO ⇔ `aciertos ≥ 32` ∧ `fallos_UT5 ≤ 2` ∧ `fallos_UT6 ≤ 5` ∧ `fallos_UT11 ≤ 2`. Blancos cuentan como fallo. Mostrar siempre el motivo del NO APTO.
-2. **SRS (SM-2 simplificado):** calificaciones Otra vez/Difícil/Bien/Fácil → `ease` inicial 2,5 (mín. 1,3); intervalos 1d → 3d → `interval×ease`; fallo resetea a 1d y `lapses+1`. Tope de tarjetas nuevas/día configurable (20 por defecto).
+2. **SRS (SM-2 simplificado):** calificaciones Otra vez/Difícil/Bien/Fácil → `ease` inicial 2,5 (mín. 1,3); intervalos 1d → 3d → `interval×ease`; fallo resetea a 1d y `lapses+1`. Tope de tarjetas nuevas/día configurable (20 por defecto). Tabla exacta por botón (fijada en F1, implementada en `lib/srs.ts` con tests):
+
+   | Botón    | Tarjeta nueva (reps=0) | Repaso                          | ease            | reps      | lapses |
+   | -------- | ---------------------- | ------------------------------- | --------------- | --------- | ------ |
+   | Otra vez | 1d                     | 1d (reset)                      | −0,20 (mín 1,3) | reset a 0 | +1     |
+   | Difícil  | 1d                     | `max(interval×1,2, interval+1)` | −0,15 (mín 1,3) | +1        | —      |
+   | Bien     | 1d                     | reps=1 → 3d; después `i×ease`   | sin cambio      | +1        | —      |
+   | Fácil    | 3d                     | `interval×ease×1,3`             | +0,15           | +1        | —      |
+
+   Intervalo redondeado a día entero (mín. 1, tope 365); `due_at = now + intervalo`. Fallar una pregunta en quiz/test crea (o reactiva con `lapses+1` y vencimiento inmediato) su tarjeta SRS: así se autogenera el mazo "Mis fallos" (tarjetas de pregunta con `lapses ≥ 1`).
 3. **Declinación (trainer de carta):** dm_año = 2°50'W − (año−2005)×7'E, redondeada al medio grado más cercano; Ct = dm + Δ (E=+, W=−); Rv = Ra + Ct; ETA = salida + distancia/velocidad.
 4. **Contenido IA:** cualquier cosa generada por IA nace en `estado=review` y jamás se publica sin aprobación admin.
 5. **Anuncios:** requieren email verificado; los de servicios de patrón requieren además revisión documental antes de `active`.

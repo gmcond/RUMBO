@@ -18,7 +18,12 @@ export const quizSubmissionSchema = z.object({
 /** Test por unidades: corrige, registra attempt y crea tarjetas de fallo. */
 export const testSubmissionSchema = z.object({
   respuestas: z.array(answerSchema).min(1).max(45),
-  duracionSeg: z.number().int().min(0).max(60 * 60 * 6).nullable(),
+  duracionSeg: z
+    .number()
+    .int()
+    .min(0)
+    .max(60 * 60 * 6)
+    .nullable(),
 });
 
 export const completeLessonSchema = z.object({
@@ -27,7 +32,9 @@ export const completeLessonSchema = z.object({
 
 export const gradeCardSchema = z.object({
   cardId: z.string().uuid(),
-  grade: z.enum(SRS_GRADES as [string, ...string[]]).transform((g) => g as (typeof SRS_GRADES)[number]),
+  grade: z
+    .enum(SRS_GRADES as [string, ...string[]])
+    .transform((g) => g as (typeof SRS_GRADES)[number]),
 });
 
 /** Filtros del configurador de tests. */

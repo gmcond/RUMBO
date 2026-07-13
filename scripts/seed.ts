@@ -78,18 +78,48 @@ const DIAGRAMS: DiagramSeed[] = [
     titulo: "Vista lateral del casco",
     svg_path: "/diagrams/casco-lateral.svg",
     hotspots: [
-      { id: "proa", termino: "Proa", definicion: "Parte delantera de la embarcación, la que corta el agua." },
+      {
+        id: "proa",
+        termino: "Proa",
+        definicion: "Parte delantera de la embarcación, la que corta el agua.",
+      },
       { id: "popa", termino: "Popa", definicion: "Parte trasera de la embarcación." },
       { id: "amura", termino: "Amura", definicion: "Zona curva del costado próxima a la proa." },
       { id: "aleta", termino: "Aleta", definicion: "Zona curva del costado próxima a la popa." },
-      { id: "obra-viva", termino: "Obra viva", definicion: "Parte sumergida del casco, también llamada carena." },
-      { id: "obra-muerta", termino: "Obra muerta", definicion: "Parte del casco que emerge del agua." },
-      { id: "linea-flotacion", termino: "Línea de flotación", definicion: "Línea que marca el agua sobre el casco; separa la obra viva de la obra muerta." },
+      {
+        id: "obra-viva",
+        termino: "Obra viva",
+        definicion: "Parte sumergida del casco, también llamada carena.",
+      },
+      {
+        id: "obra-muerta",
+        termino: "Obra muerta",
+        definicion: "Parte del casco que emerge del agua.",
+      },
+      {
+        id: "linea-flotacion",
+        termino: "Línea de flotación",
+        definicion:
+          "Línea que marca el agua sobre el casco; separa la obra viva de la obra muerta.",
+      },
       { id: "roda", termino: "Roda", definicion: "Pieza que prolonga la quilla hacia proa." },
       { id: "codaste", termino: "Codaste", definicion: "Pieza que prolonga la quilla hacia popa." },
-      { id: "quilla", termino: "Quilla", definicion: "Viga longitudinal inferior, la columna vertebral del barco." },
-      { id: "timon", termino: "Timón", definicion: "Órgano de gobierno: la mecha es su eje y la pala la superficie que desvía el agua." },
-      { id: "helice", termino: "Hélice", definicion: "Propulsor del barco; su paso es el avance teórico en una vuelta completa." },
+      {
+        id: "quilla",
+        termino: "Quilla",
+        definicion: "Viga longitudinal inferior, la columna vertebral del barco.",
+      },
+      {
+        id: "timon",
+        termino: "Timón",
+        definicion:
+          "Órgano de gobierno: la mecha es su eje y la pala la superficie que desvía el agua.",
+      },
+      {
+        id: "helice",
+        termino: "Hélice",
+        definicion: "Propulsor del barco; su paso es el avance teórico en una vuelta completa.",
+      },
     ],
   },
   {
@@ -100,8 +130,16 @@ const DIAGRAMS: DiagramSeed[] = [
       { id: "eslora", termino: "Eslora", definicion: "Longitud del barco de proa a popa." },
       { id: "manga", termino: "Manga", definicion: "Anchura máxima del barco." },
       { id: "puntal", termino: "Puntal", definicion: "Altura desde la quilla hasta la cubierta." },
-      { id: "calado", termino: "Calado", definicion: "Profundidad de la obra viva: de la flotación al punto más bajo de la quilla." },
-      { id: "francobordo", termino: "Francobordo", definicion: "Altura desde la flotación hasta la cubierta." },
+      {
+        id: "calado",
+        termino: "Calado",
+        definicion: "Profundidad de la obra viva: de la flotación al punto más bajo de la quilla.",
+      },
+      {
+        id: "francobordo",
+        termino: "Francobordo",
+        definicion: "Altura desde la flotación hasta la cubierta.",
+      },
     ],
   },
 ];

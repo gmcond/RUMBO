@@ -7,12 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getDegree, getUnitsForDegree } from "@/lib/study/data";
-import {
-  cardUnitId,
-  getUserCards,
-  isDue,
-  remainingNewAllowance,
-} from "@/lib/study/srs-queue";
+import { cardUnitId, getUserCards, isDue, remainingNewAllowance } from "@/lib/study/srs-queue";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Flashcards" };
@@ -31,7 +26,10 @@ export default async function FlashcardsPage() {
     supabase
       .from("concepts")
       .select("id, unit_id")
-      .in("unit_id", units.map((u) => u.id)),
+      .in(
+        "unit_id",
+        units.map((u) => u.id)
+      ),
   ]);
 
   const allowance = remainingNewAllowance(cards, now);

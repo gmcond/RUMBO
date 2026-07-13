@@ -58,6 +58,16 @@ export async function getUnit(
   return units.find((u) => u.numero === numero) ?? null;
 }
 
+/** Fisher-Yates sobre una copia. */
+export function shuffleArray<T>(items: T[]): T[] {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
 /** opciones es jsonb en BD (CHECK de array de 4); lo normaliza a string[4]. */
 export function parseOpciones(json: Json): string[] {
   if (!Array.isArray(json) || json.length !== 4 || !json.every((o) => typeof o === "string")) {

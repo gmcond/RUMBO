@@ -10,6 +10,7 @@ import {
   getLastAnswerMap,
   getUnitsForDegree,
   parseOpciones,
+  shuffleArray,
   shuffleOptions,
 } from "@/lib/study/data";
 import { createClient } from "@/lib/supabase/server";
@@ -70,7 +71,10 @@ export default async function PracticaPage({
       .from("questions")
       .select("id, enunciado, opciones, units(numero)")
       .eq("estado", "published")
-      .in("unit_id", selectedUnits.map((u) => u.id)),
+      .in(
+        "unit_id",
+        selectedUnits.map((u) => u.id)
+      ),
     getLastAnswerMap(supabase),
   ]);
   if (error) throw new Error(`questions: ${error.message}`);
@@ -82,21 +86,18 @@ export default async function PracticaPage({
     candidates = candidates.filter((q) => !lastAnswers.has(q.id));
   }
 
-  for (let i = candidates.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
-  }
-
-  const questions: TestQuestion[] = candidates.slice(0, n).map((q) => {
-    const { opciones, map } = shuffleOptions(parseOpciones(q.opciones));
-    return {
-      questionId: q.id,
-      enunciado: q.enunciado,
-      opciones,
-      map,
-      unit: q.units.numero,
-    };
-  });
+  const questions: TestQuestion[] = shuffleArray(candidates)
+    .slice(0, n)
+    .map((q) => {
+      const { opciones, map } = shuffleOptions(parseOpciones(q.opciones));
+      return {
+        questionId: q.id,
+        enunciado: q.enunciado,
+        opciones,
+        map,
+        unit: q.units.numero,
+      };
+    });
 
   if (questions.length === 0) {
     return (

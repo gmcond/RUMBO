@@ -34,10 +34,7 @@ export function MiniQuiz({
     return (
       <div className="flex flex-col items-start gap-3">
         <p className="text-muted-foreground text-sm">{t("noQuestions")}</p>
-        <Button
-          size="sm"
-          onClick={() => startTransition(() => completeLesson({ lessonId }))}
-        >
+        <Button size="sm" onClick={() => startTransition(() => completeLesson({ lessonId }))}>
           {t("markDone")}
         </Button>
       </div>
@@ -114,10 +111,16 @@ export function MiniQuiz({
                         {opcion}
                       </Label>
                       {isCorrect && (
-                        <CheckCircle2 className="size-4 shrink-0 text-emerald-600 dark:text-emerald-400" aria-hidden />
+                        <CheckCircle2
+                          className="size-4 shrink-0 text-emerald-600 dark:text-emerald-400"
+                          aria-hidden
+                        />
                       )}
                       {isChosenWrong && (
-                        <XCircle className="size-4 shrink-0 text-red-600 dark:text-red-400" aria-hidden />
+                        <XCircle
+                          className="size-4 shrink-0 text-red-600 dark:text-red-400"
+                          aria-hidden
+                        />
                       )}
                     </div>
                   );

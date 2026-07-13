@@ -71,9 +71,7 @@ describe("parseBateria (manual-per.md)", () => {
 
   it("extrae exactamente 60 preguntas numeradas 1..60", () => {
     expect(questions).toHaveLength(60);
-    expect(questions.map((q) => q.numero)).toEqual(
-      Array.from({ length: 60 }, (_, i) => i + 1)
-    );
+    expect(questions.map((q) => q.numero)).toEqual(Array.from({ length: 60 }, (_, i) => i + 1));
   });
 
   it("cada pregunta tiene 4 opciones no vacías y correcta en rango", () => {
@@ -112,9 +110,7 @@ describe("parseSimulacro (manual-per.md)", () => {
 
   it("extrae exactamente 45 preguntas numeradas 1..45", () => {
     expect(questions).toHaveLength(45);
-    expect(questions.map((q) => q.numero)).toEqual(
-      Array.from({ length: 45 }, (_, i) => i + 1)
-    );
+    expect(questions.map((q) => q.numero)).toEqual(Array.from({ length: 45 }, (_, i) => i + 1));
   });
 
   it("respeta la distribución oficial 4+2+4+2+5+10+2+3+4+5+4", () => {

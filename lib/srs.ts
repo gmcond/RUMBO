@@ -85,11 +85,7 @@ export function review(state: SrsState, grade: SrsGrade, now: Date): SrsReview {
     case "good":
       next = {
         ease,
-        intervalDays: isNew
-          ? 1
-          : state.reps === 1
-            ? 3
-            : clampInterval(state.intervalDays * ease),
+        intervalDays: isNew ? 1 : state.reps === 1 ? 3 : clampInterval(state.intervalDays * ease),
         reps: state.reps + 1,
         lapses: state.lapses,
       };

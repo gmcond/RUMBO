@@ -38,10 +38,7 @@ export default async function UnitPage({
         .order("orden"),
       supabase.from("lesson_progress").select("lesson_id"),
       supabase.from("diagrams").select("id, titulo").eq("unit_id", unit.id),
-      supabase
-        .from("concepts")
-        .select("id", { count: "exact", head: true })
-        .eq("unit_id", unit.id),
+      supabase.from("concepts").select("id", { count: "exact", head: true }).eq("unit_id", unit.id),
     ]);
 
   const completedIds = new Set((progress ?? []).map((p) => p.lesson_id));
@@ -49,7 +46,7 @@ export default async function UnitPage({
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <Button asChild variant="ghost" size="sm" className="-ml-2 mb-2">
+        <Button asChild variant="ghost" size="sm" className="mb-2 -ml-2">
           <Link href={`/estudio/${degree.slug}`}>
             <ArrowLeft aria-hidden />
             {degree.nombre}
@@ -96,7 +93,10 @@ export default async function UnitPage({
                     className="hover:bg-muted/50 -mx-2 flex items-center gap-3 rounded-md px-2 py-3"
                   >
                     {done ? (
-                      <CheckCircle2 className="size-5 shrink-0 text-emerald-600 dark:text-emerald-400" aria-label={t("completed")} />
+                      <CheckCircle2
+                        className="size-5 shrink-0 text-emerald-600 dark:text-emerald-400"
+                        aria-label={t("completed")}
+                      />
                     ) : (
                       <Circle className="text-muted-foreground/40 size-5 shrink-0" aria-hidden />
                     )}

@@ -11,11 +11,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Unidades" };
 
-export default async function DegreePage({
-  params,
-}: {
-  params: Promise<{ degree: string }>;
-}) {
+export default async function DegreePage({ params }: { params: Promise<{ degree: string }> }) {
   const { degree: degreeSlug } = await params;
   const supabase = await createClient();
 

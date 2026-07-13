@@ -83,10 +83,7 @@ export function DiagramViewer({
     el?.classList.add(cls);
   };
 
-  // El handler vive en un ref para que el listener delegado (montado una
-  // sola vez por SVG) siempre vea el estado actual.
-  const handleTapRef = useRef<(id: string) => void>(() => {});
-  handleTapRef.current = (id: string) => {
+  const handleTap = (id: string) => {
     if (!byId.has(id)) return;
 
     if (mode === "explore") {
@@ -138,6 +135,13 @@ export function DiagramViewer({
     }
   };
 
+  // El handler vive en un ref para que el listener delegado (montado una
+  // sola vez por SVG) siempre vea el estado actual.
+  const handleTapRef = useRef<(id: string) => void>(() => {});
+  useEffect(() => {
+    handleTapRef.current = handleTap;
+  });
+
   // Wiring del SVG inyectado: accesibilidad + listeners delegados.
   useEffect(() => {
     const container = containerRef.current;
@@ -182,7 +186,13 @@ export function DiagramViewer({
   const startGame = () => {
     clearStates();
     setSelectedId(null);
-    setGame({ order: shuffle(hotspots.map((h) => h.id)), index: 0, attempts: 0, okFirstTry: 0, finished: false });
+    setGame({
+      order: shuffle(hotspots.map((h) => h.id)),
+      index: 0,
+      attempts: 0,
+      okFirstTry: 0,
+      finished: false,
+    });
   };
 
   const handleModeChange = (value: string) => {
@@ -219,7 +229,10 @@ export function DiagramViewer({
             {game.finished ? (
               <div className="flex flex-col items-start gap-3">
                 <p className="flex items-center gap-2 font-medium">
-                  <CheckCircle2 className="size-5 text-emerald-600 dark:text-emerald-400" aria-hidden />
+                  <CheckCircle2
+                    className="size-5 text-emerald-600 dark:text-emerald-400"
+                    aria-hidden
+                  />
                   {t("finished", { ok: game.okFirstTry, total: game.order.length })}
                 </p>
                 <Button size="sm" variant="outline" onClick={startGame}>

@@ -90,10 +90,7 @@ export function TestRunner({ questions }: { questions: TestQuestion[] }) {
                 {Object.entries(result.desglosePorUt)
                   .sort(([a], [b]) => Number(a) - Number(b))
                   .map(([unit, stats]) => (
-                    <Badge
-                      key={unit}
-                      variant={stats.fallos === 0 ? "secondary" : "destructive"}
-                    >
+                    <Badge key={unit} variant={stats.fallos === 0 ? "secondary" : "destructive"}>
                       {t("utShort", { numero: unit })} {stats.aciertos}/{stats.total}
                     </Badge>
                   ))}
@@ -122,9 +119,15 @@ export function TestRunner({ questions }: { questions: TestQuestion[] }) {
                   </p>
                   <p className="flex items-start gap-2 text-sm">
                     {c.ok ? (
-                      <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-600 dark:text-emerald-400" aria-hidden />
+                      <CheckCircle2
+                        className="mt-0.5 size-4 shrink-0 text-emerald-600 dark:text-emerald-400"
+                        aria-hidden
+                      />
                     ) : (
-                      <XCircle className="mt-0.5 size-4 shrink-0 text-red-600 dark:text-red-400" aria-hidden />
+                      <XCircle
+                        className="mt-0.5 size-4 shrink-0 text-red-600 dark:text-red-400"
+                        aria-hidden
+                      />
                     )}
                     <span>
                       <span className="text-muted-foreground">{t("yourAnswer")}</span>{" "}
@@ -174,9 +177,7 @@ export function TestRunner({ questions }: { questions: TestQuestion[] }) {
           <RadioGroup
             key={q.questionId}
             value={selected[q.questionId]?.toString() ?? ""}
-            onValueChange={(value) =>
-              setSelected((s) => ({ ...s, [q.questionId]: Number(value) }))
-            }
+            onValueChange={(value) => setSelected((s) => ({ ...s, [q.questionId]: Number(value) }))}
           >
             {q.opciones.map((opcion, displayIndex) => (
               <div

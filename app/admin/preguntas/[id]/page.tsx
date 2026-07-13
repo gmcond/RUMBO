@@ -18,11 +18,7 @@ export const metadata: Metadata = { title: "Editar pregunta" };
 
 const LETTERS = ["a", "b", "c", "d"] as const;
 
-export default async function EditQuestionPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function EditQuestionPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const t = await getTranslations("admin.questions");
   const supabase = await createClient();
@@ -42,7 +38,7 @@ export default async function EditQuestionPage({
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <Button asChild variant="ghost" size="sm" className="-ml-2 mb-2">
+        <Button asChild variant="ghost" size="sm" className="mb-2 -ml-2">
           <Link href="/admin/preguntas">
             <ArrowLeft aria-hidden />
             {t("backToList")}
@@ -80,7 +76,12 @@ export default async function EditQuestionPage({
 
             <Field>
               <FieldLabel htmlFor="enunciado">{t("statement")}</FieldLabel>
-              <Textarea id="enunciado" name="enunciado" defaultValue={question.enunciado} required />
+              <Textarea
+                id="enunciado"
+                name="enunciado"
+                defaultValue={question.enunciado}
+                required
+              />
             </Field>
 
             <div className="flex flex-col gap-3">

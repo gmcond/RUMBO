@@ -147,10 +147,7 @@ function splitOptions(body: string): { enunciado: string; opciones: Opciones } {
   const opciones = letters.map((letter, i) => {
     const start = positions[i] + ` ${letter}) `.length;
     const end = i < 3 ? positions[i + 1] : body.length;
-    return body
-      .slice(start, end)
-      .trim()
-      .replace(/\.$/, "");
+    return body.slice(start, end).trim().replace(/\.$/, "");
   }) as Opciones;
 
   if (!enunciado || opciones.some((o) => !o)) {

@@ -54,7 +54,7 @@ export default async function LessonPage({
   return (
     <article className="flex flex-col gap-6">
       <div>
-        <Button asChild variant="ghost" size="sm" className="-ml-2 mb-2">
+        <Button asChild variant="ghost" size="sm" className="mb-2 -ml-2">
           <Link href={unitPath}>
             <ArrowLeft aria-hidden />
             UT{unit.numero} · {unit.titulo}
@@ -66,7 +66,10 @@ export default async function LessonPage({
           </h1>
           {completed && (
             <Badge variant="secondary" className="gap-1">
-              <CheckCircle2 className="size-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden />
+              <CheckCircle2
+                className="size-3.5 text-emerald-600 dark:text-emerald-400"
+                aria-hidden
+              />
               {t("completed")}
             </Badge>
           )}

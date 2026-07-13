@@ -39,7 +39,7 @@ export default async function DiagramPage({
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <Button asChild variant="ghost" size="sm" className="-ml-2 mb-2">
+        <Button asChild variant="ghost" size="sm" className="mb-2 -ml-2">
           <Link href={`/estudio/${degree.slug}/ut${unit.numero}`}>
             <ArrowLeft aria-hidden />
             UT{unit.numero} · {unit.titulo}

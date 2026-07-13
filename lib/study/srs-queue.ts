@@ -117,9 +117,7 @@ export async function buildUnitQueue(
       .eq("unit_id", unitId);
     if (error) throw new Error(`concepts: ${error.message}`);
 
-    const fresh = (concepts ?? [])
-      .filter((c) => !withCard.has(c.id))
-      .slice(0, allowance);
+    const fresh = (concepts ?? []).filter((c) => !withCard.has(c.id)).slice(0, allowance);
 
     if (fresh.length > 0) {
       const { data: created, error: insertError } = await supabase
@@ -141,10 +139,7 @@ export async function buildUnitQueue(
 }
 
 /** Cola del mazo "Mis fallos": tarjetas de pregunta falladas y vencidas. */
-export async function buildFailsQueue(
-  supabase: ServerSupabase,
-  now: Date
-): Promise<SessionCard[]> {
+export async function buildFailsQueue(supabase: ServerSupabase, now: Date): Promise<SessionCard[]> {
   const cards = await getUserCards(supabase);
   return cards
     .filter((c) => c.question_id !== null && c.lapses >= 1 && isDue(c, now))

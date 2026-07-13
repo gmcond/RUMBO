@@ -12,11 +12,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Repaso" };
 
-export default async function DeckPage({
-  params,
-}: {
-  params: Promise<{ mazo: string }>;
-}) {
+export default async function DeckPage({ params }: { params: Promise<{ mazo: string }> }) {
   const { mazo } = await params;
   const supabase = await createClient();
   const {
@@ -48,7 +44,7 @@ export default async function DeckPage({
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <Button asChild variant="ghost" size="sm" className="-ml-2 mb-2">
+        <Button asChild variant="ghost" size="sm" className="mb-2 -ml-2">
           <Link href="/estudio/flashcards">
             <ArrowLeft aria-hidden />
             {t("backToDecks")}
