@@ -299,6 +299,7 @@ export type Database = {
           id: string;
           media: Json;
           orden: number;
+          slug: string | null;
           titulo: string;
           unit_id: string;
           updated_at: string;
@@ -309,6 +310,7 @@ export type Database = {
           id?: string;
           media?: Json;
           orden?: number;
+          slug?: string | null;
           titulo: string;
           unit_id: string;
           updated_at?: string;
@@ -319,6 +321,7 @@ export type Database = {
           id?: string;
           media?: Json;
           orden?: number;
+          slug?: string | null;
           titulo?: string;
           unit_id?: string;
           updated_at?: string;
