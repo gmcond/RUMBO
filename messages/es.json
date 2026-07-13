@@ -166,6 +166,31 @@
   },
   "admin": {
     "title": "Panel de administración",
-    "placeholder": "Cola de changesets, moderación y banco de preguntas. Llegan en fases posteriores."
+    "placeholder": "Cola de changesets, moderación y banco de preguntas. Llegan en fases posteriores.",
+    "questionsCta": "Banco de preguntas",
+    "questions": {
+      "title": "Banco de preguntas",
+      "subtitle": "Revisa, edita y publica las preguntas generadas por IA.",
+      "statusReview": "En revisión",
+      "statusPublished": "Publicadas",
+      "statusDraft": "Descartadas",
+      "colUnit": "UT",
+      "colQuestion": "Enunciado",
+      "colOrigin": "Origen",
+      "colDifficulty": "Dif.",
+      "empty": "No hay preguntas en este estado.",
+      "edit": "Editar pregunta",
+      "unit": "Unidad",
+      "statement": "Enunciado",
+      "option": "Opción {letter}",
+      "correct": "Correcta",
+      "explanation": "Explicación",
+      "difficulty": "Dificultad (1-5)",
+      "noDifficulty": "Sin definir",
+      "save": "Guardar",
+      "approve": "Aprobar y publicar",
+      "reject": "Rechazar",
+      "backToList": "Volver al banco"
+    }
   }
 }
