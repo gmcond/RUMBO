@@ -57,7 +57,47 @@
   },
   "study": {
     "title": "Tu estudio",
-    "placeholder": "Aquí vivirán tus lecciones, flashcards y simulacros. Llegan en la Fase 1."
+    "panel": {
+      "unitsCta": "Ver unidades",
+      "flashcardsCta": "Repasar",
+      "testsCta": "Hacer un test",
+      "progressTitle": "Progreso por unidad",
+      "dueTitle": "Flashcards",
+      "dueCount": "{count, plural, =0 {No tienes tarjetas vencidas} one {# tarjeta vencida hoy} other {# tarjetas vencidas hoy}}",
+      "recentTitle": "Últimos tests",
+      "noTests": "Aún no has hecho ningún test.",
+      "testScore": "{aciertos}/{total} aciertos",
+      "empty": "Todavía no hay contenido sembrado. Ejecuta el seed para empezar."
+    },
+    "units": "Unidades teóricas",
+    "eliminatory": "Eliminatoria",
+    "maxErrors": "máx. {count} fallos",
+    "lessonsProgress": "{completed}/{total} lecciones",
+    "lessons": "Lecciones",
+    "diagrams": "Diagramas interactivos",
+    "concepts": "{count} conceptos en flashcards",
+    "flashcardsCta": "Repasar flashcards",
+    "testCta": "Hacer un test",
+    "completed": "Completada",
+    "quiz": {
+      "title": "Mini-quiz de la lección",
+      "help": "Tres preguntas rápidas para fijar lo leído. Al corregirlas, la lección queda completada.",
+      "submit": "Corregir",
+      "submitting": "Corrigiendo…",
+      "score": "Aciertos: {aciertos} de {total}",
+      "lessonDone": "Lección completada",
+      "blank": "Sin responder",
+      "correctAnswer": "Respuesta correcta:",
+      "explanation": "Explicación:",
+      "markDone": "Marcar lección como completada",
+      "noQuestions": "Esta unidad aún no tiene preguntas publicadas.",
+      "error": "No se pudo corregir el quiz. Inténtalo de nuevo."
+    },
+    "lesson": {
+      "prev": "Anterior",
+      "next": "Siguiente",
+      "backToUnit": "Volver a la unidad"
+    }
   },
   "admin": {
     "title": "Panel de administración",
