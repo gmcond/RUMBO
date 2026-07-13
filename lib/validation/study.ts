@@ -26,6 +26,22 @@ export const testSubmissionSchema = z.object({
     .nullable(),
 });
 
+/**
+ * Simulacro (modo examen): corrige contra la exam_config indicada, registra
+ * attempt con veredicto y alimenta "Mis fallos". El modo práctica no usa este
+ * esquema: envía por submitTest (attempt tipo 'test', sin veredicto en BD).
+ */
+export const simulacroSubmissionSchema = z.object({
+  configId: z.string().uuid(),
+  respuestas: z.array(answerSchema).min(1).max(100),
+  duracionSeg: z
+    .number()
+    .int()
+    .min(0)
+    .max(60 * 60 * 6)
+    .nullable(),
+});
+
 export const completeLessonSchema = z.object({
   lessonId: z.string().uuid(),
 });

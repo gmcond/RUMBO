@@ -28,11 +28,12 @@ export interface ExamAnswer {
   correcta: number;
 }
 
-export interface UnitBreakdown {
+/** Type alias (no interface): así Record<string, UnitBreakdown> encaja en Json. */
+export type UnitBreakdown = {
   aciertos: number;
   fallos: number;
   total: number;
-}
+};
 
 export type Veredicto = "APTO" | "NO APTO";
 

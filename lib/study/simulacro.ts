@@ -14,9 +14,7 @@ export interface MissingUnit {
   available: number;
 }
 
-export type SimulacroPool<T> =
-  | { ok: true; questions: T[] }
-  | { ok: false; missing: MissingUnit[] };
+export type SimulacroPool<T> = { ok: true; questions: T[] } | { ok: false; missing: MissingUnit[] };
 
 /** Fisher-Yates sobre una copia, con RNG inyectable. */
 export function shuffleWith<T>(items: T[], rng: Rng): T[] {

@@ -2,12 +2,20 @@
 
 import { revalidatePath } from "next/cache";
 
+import {
+  gradeExam,
+  parseDistribucion,
+  parseTopes,
+  type NoAptoMotivo,
+  type Veredicto,
+} from "@/lib/exam-grading";
 import { review, type SrsState } from "@/lib/srs";
 import { createClient } from "@/lib/supabase/server";
 import {
   completeLessonSchema,
   gradeCardSchema,
   quizSubmissionSchema,
+  simulacroSubmissionSchema,
   testSubmissionSchema,
   type Answer,
 } from "@/lib/validation/study";
@@ -180,6 +188,81 @@ export async function submitTest(input: unknown): Promise<GradedResult> {
 
   revalidatePath("/estudio");
   return result;
+}
+
+export interface SimulacroResult extends GradedResult {
+  veredicto: Veredicto;
+  motivos: NoAptoMotivo[];
+}
+
+/**
+ * Simulacro en modo examen: corrige contra la BD, aplica la exam_config
+ * (mínimo global + topes eliminatorios, blanco=fallo), registra el attempt
+ * inmutable con veredicto y alimenta "Mis fallos".
+ */
+export async function submitSimulacro(input: unknown): Promise<SimulacroResult> {
+  const { supabase, user } = await requireUser();
+  const { configId, respuestas, duracionSeg } = simulacroSubmissionSchema.parse(input);
+
+  const { data: config, error: configError } = await supabase
+    .from("exam_configs")
+    .select("id, num_preguntas, min_aciertos, distribucion, topes")
+    .eq("id", configId)
+    .single();
+  if (configError || !config) throw new Error("Configuración de examen no encontrada");
+
+  if (respuestas.length !== config.num_preguntas) {
+    throw new Error("El simulacro no coincide con la configuración del examen");
+  }
+
+  const result = await gradeAnswers(supabase, respuestas);
+
+  // El attempt alimenta el semáforo de preparación: exige que el pool
+  // enviado respete la distribución por UT de la config.
+  const distribucion = parseDistribucion(config.distribucion);
+  const porUnidad = new Map<string, number>();
+  for (const c of result.corrections) {
+    porUnidad.set(String(c.unit), (porUnidad.get(String(c.unit)) ?? 0) + 1);
+  }
+  for (const [unit, needed] of Object.entries(distribucion)) {
+    if ((porUnidad.get(unit) ?? 0) !== needed) {
+      throw new Error("El simulacro no respeta la distribución por unidades");
+    }
+  }
+
+  const grade = gradeExam(
+    result.corrections.map((c) => ({ unit: c.unit, elegida: c.elegida, correcta: c.correcta })),
+    { minAciertos: config.min_aciertos, topes: parseTopes(config.topes) }
+  );
+
+  const respuestasJson = result.corrections.map((c) => ({
+    question_id: c.questionId,
+    unit: c.unit,
+    elegida: c.elegida,
+    correcta: c.correcta,
+    ok: c.ok,
+  }));
+
+  const { error } = await supabase.from("attempts").insert({
+    user_id: user.id,
+    tipo: "simulacro",
+    exam_config_id: config.id,
+    respuestas: respuestasJson,
+    aciertos: grade.aciertos,
+    desglose_por_ut: grade.desglosePorUt,
+    veredicto: grade.veredicto,
+    duracion_seg: duracionSeg,
+  });
+  if (error) throw new Error(`attempts: ${error.message}`);
+
+  await registerFailures(
+    supabase,
+    user.id,
+    result.corrections.filter((c) => !c.ok).map((c) => c.questionId)
+  );
+
+  revalidatePath("/estudio");
+  return { ...result, veredicto: grade.veredicto, motivos: grade.motivos };
 }
 
 /** Marca una lección como completada (progreso binario del PRD). */
