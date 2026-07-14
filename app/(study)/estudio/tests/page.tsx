@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getDegree, getUnitsForDegree } from "@/lib/study/data";
+import { getActiveDegree, getUnitsForDegree } from "@/lib/study/data";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Tests" };
@@ -21,7 +21,7 @@ export default async function TestsPage({
   const supabase = await createClient();
   const t = await getTranslations("study.tests");
 
-  const degree = await getDegree(supabase, "per");
+  const degree = await getActiveDegree(supabase);
   if (!degree) return null;
   const units = await getUnitsForDegree(supabase, degree.id);
 

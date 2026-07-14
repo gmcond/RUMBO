@@ -15,6 +15,7 @@ import {
   completeLessonSchema,
   gradeCardSchema,
   quizSubmissionSchema,
+  setActiveDegreeSchema,
   simulacroSubmissionSchema,
   testSubmissionSchema,
   type Answer,
@@ -263,6 +264,30 @@ export async function submitSimulacro(input: unknown): Promise<SimulacroResult> 
 
   revalidatePath("/estudio");
   return { ...result, veredicto: grade.veredicto, motivos: grade.motivos };
+}
+
+/**
+ * Cambia la titulación activa del perfil (F4). Todo el área de estudio se
+ * deriva de `profiles.degree_objetivo`, así que basta revalidar el layout.
+ */
+export async function setActiveDegree(input: unknown): Promise<void> {
+  const { supabase, user } = await requireUser();
+  const { degreeId } = setActiveDegreeSchema.parse(input);
+
+  const { data: degree } = await supabase
+    .from("degrees")
+    .select("id")
+    .eq("id", degreeId)
+    .maybeSingle();
+  if (!degree) throw new Error("Titulación no encontrada");
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ degree_objetivo: degreeId })
+    .eq("user_id", user.id);
+  if (error) throw new Error(`profiles: ${error.message}`);
+
+  revalidatePath("/estudio", "layout");
 }
 
 /** Marca una lección como completada (progreso binario del PRD). */

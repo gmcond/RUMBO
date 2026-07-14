@@ -6,7 +6,7 @@ import { AlertTriangle, Layers } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getDegree, getUnitsForDegree } from "@/lib/study/data";
+import { getActiveDegree, getUnitsForDegree } from "@/lib/study/data";
 import { cardUnitId, getUserCards, isDue, remainingNewAllowance } from "@/lib/study/srs-queue";
 import { createClient } from "@/lib/supabase/server";
 
@@ -17,9 +17,10 @@ export default async function FlashcardsPage() {
   const t = await getTranslations("study.flashcards");
   const now = new Date();
 
-  const degree = await getDegree(supabase, "per");
+  const degree = await getActiveDegree(supabase);
   if (!degree) return null;
   const units = await getUnitsForDegree(supabase, degree.id);
+  const unitIdSet = new Set<string | null>(units.map((u) => u.id));
 
   const [cards, { data: concepts }] = await Promise.all([
     getUserCards(supabase),
@@ -35,7 +36,11 @@ export default async function FlashcardsPage() {
   const allowance = remainingNewAllowance(cards, now);
   const conceptsWithCard = new Set(cards.map((c) => c.concept_id).filter(Boolean));
 
-  const failCards = cards.filter((c) => c.question_id !== null && c.lapses >= 1);
+  // "Mis fallos" también se acota a la titulación activa (unidades compartidas:
+  // un fallo de UT3 aparece en PER y PNB; uno de UT11 solo en PER).
+  const failCards = cards.filter(
+    (c) => c.question_id !== null && c.lapses >= 1 && unitIdSet.has(cardUnitId(c))
+  );
   const failsDue = failCards.filter((c) => isDue(c, now)).length;
 
   return (

@@ -46,6 +46,11 @@ export const completeLessonSchema = z.object({
   lessonId: z.string().uuid(),
 });
 
+/** Cambio de titulación activa desde el selector del área de estudio (F4). */
+export const setActiveDegreeSchema = z.object({
+  degreeId: z.string().uuid(),
+});
+
 export const gradeCardSchema = z.object({
   cardId: z.string().uuid(),
   grade: z

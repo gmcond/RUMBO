@@ -138,11 +138,24 @@ export async function buildUnitQueue(
   return [...due, ...introduced].map(toSessionCard);
 }
 
-/** Cola del mazo "Mis fallos": tarjetas de pregunta falladas y vencidas. */
-export async function buildFailsQueue(supabase: ServerSupabase, now: Date): Promise<SessionCard[]> {
+/**
+ * Cola del mazo "Mis fallos": tarjetas de pregunta falladas y vencidas,
+ * acotadas a las unidades de la titulación activa (F4).
+ */
+export async function buildFailsQueue(
+  supabase: ServerSupabase,
+  now: Date,
+  allowedUnitIds: ReadonlySet<string | null>
+): Promise<SessionCard[]> {
   const cards = await getUserCards(supabase);
   return cards
-    .filter((c) => c.question_id !== null && c.lapses >= 1 && isDue(c, now))
+    .filter(
+      (c) =>
+        c.question_id !== null &&
+        c.lapses >= 1 &&
+        isDue(c, now) &&
+        allowedUnitIds.has(cardUnitId(c))
+    )
     .sort((a, b) => new Date(a.due_at).getTime() - new Date(b.due_at).getTime())
     .slice(0, SESSION_MAX_DUE)
     .map(toSessionCard);
