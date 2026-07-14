@@ -205,6 +205,10 @@ Páginas públicas SEO del PER por CCAA (Cataluña con datos reales verificados;
 Sembrar PNB reutilizando unidades del PER; selector de titulación en onboarding y en toda la app; exam_config PNB.
 ✅ *Un usuario puede cambiar a PNB y estudiar/simular sin código nuevo.*
 
+**F4.5 · Rediseño UI (fase intermedia pre-lanzamiento)**
+Rediseño visual completo para publicar RUMBO en dominio propio. Dirección de arte elegida entre 2-3 propuestas (personalidad, paleta claro/oscuro, par tipográfico, estilo de componentes, wordmark RUMBO) con mockups previos y elección del product owner. Alcance: design tokens centralizados (Tailwind/shadcn, ambos modos) y tipografía global; landing renovada orientada a conversión (hero, propuesta de valor, CTA de registro); área de estudio pulida (panel, tarjetas, progreso, semáforo, flashcards, runner de tests/simulacro, trainer de carta, estados vacíos); guía pública `/titulos` y `/escuelas` al nuevo estilo; microinteracciones sobrias; accesibilidad AA (contraste, focus visible, targets táctiles). Restricciones duras: cero cambios de lógica/BD/RLS; e2e en verde (solo ajustes de selectores, nunca de comportamiento); mobile-first 390 px; build limpio y LCP móvil dentro del presupuesto (§4). Checkpoint visual con el product owner cuando la landing real esté al nuevo estilo, antes de extender al resto de la app.
+✅ *Enseñable desde el móvil a un desconocido como producto publicable, sin regresión funcional (suite e2e completa verde y build limpio).*
+
 **F5 · Marketplaces de amarres y embarcaciones**
 Módulo `listings` genérico, mapa de puertos, publicación con fotos (Storage), búsqueda+filtros, mensajería, moderación admin.
 ✅ *Flujo completo: publicar amarre → aparecer en mapa → recibir mensaje.*
