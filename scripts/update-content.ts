@@ -1,7 +1,7 @@
 /**
  * Pipeline semi-automático de actualización de contenido (PRD §M5).
  *
- *   npm run update-content -- --scope=tasas|convocatorias|normativa|escuelas [--ccaa=CAT]
+ *   npm run update-content -- --scope=tasas|convocatorias|normativa|escuelas [--ccaa=CAT] [--degree=per]
  *
  * Flujo: (1) consulta SOLO la whitelist de fuentes oficiales — impuesta a
  * nivel de API con allowed_domains, no solo por prompt —, (2) extrae datos
@@ -119,19 +119,21 @@ Todos los campos de "fields" son opcionales: incluye solo los que puedas citar.`
 }`,
 };
 
+// {degree} se sustituye por la etiqueta de la titulación (PER, PNB…) — F4.
 const SCOPE_BRIEF: Record<Scope, string> = {
   tasas:
-    "las tasas oficiales vigentes del examen PER (derechos de examen) y de expedición del título",
+    "las tasas oficiales vigentes del examen {degree} (derechos de examen) y de expedición del título",
   normativa:
-    "el organismo competente, particularidades del examen PER y enlaces oficiales de trámites",
+    "el organismo competente, particularidades del examen {degree} y enlaces oficiales de trámites",
   convocatorias:
-    "las convocatorias del examen PER del año en curso (fechas de examen, plazos de inscripción, sedes)",
+    "las convocatorias del examen {degree} del año en curso (fechas de examen, plazos de inscripción, sedes)",
   escuelas: "las escuelas náuticas homologadas que figuren en registros oficiales",
 };
 
-function buildPrompt(scope: Scope, ccaa: CcaaCode, domains: string[]): string {
+function buildPrompt(scope: Scope, ccaa: CcaaCode, domains: string[], degreeLabel: string): string {
   const ccaaName = CCAA.find((c) => c.code === ccaa)!.name;
-  return `Busca ${SCOPE_BRIEF[scope]} para la comunidad autónoma de ${ccaaName} (código "${ccaa}"), España.
+  const brief = SCOPE_BRIEF[scope].replaceAll("{degree}", degreeLabel);
+  return `Busca ${brief} para la comunidad autónoma de ${ccaaName} (código "${ccaa}"), España.
 
 Reglas estrictas:
 - Consulta ÚNICAMENTE fuentes oficiales; la búsqueda ya está limitada a: ${domains.join(", ")}.
@@ -252,11 +254,12 @@ async function extract(
   client: Anthropic,
   scope: Scope,
   ccaa: CcaaCode,
+  degreeLabel: string,
   usage: Usage
 ): Promise<ExtractionResult> {
   const domains = allowedDomains(ccaa);
   const session: Session = {
-    messages: [{ role: "user", content: buildPrompt(scope, ccaa, domains) }],
+    messages: [{ role: "user", content: buildPrompt(scope, ccaa, domains, degreeLabel) }],
   };
 
   let response = await runTurn(client, session, domains, usage);
@@ -444,14 +447,20 @@ async function main() {
     options: {
       scope: { type: "string" },
       ccaa: { type: "string" },
+      degree: { type: "string" },
     },
   });
 
   const scope = values.scope as Scope | undefined;
   if (!scope || !SCOPES.includes(scope)) {
-    console.error(`Uso: npm run update-content -- --scope=${SCOPES.join("|")} [--ccaa=CAT]`);
+    console.error(
+      `Uso: npm run update-content -- --scope=${SCOPES.join("|")} [--ccaa=CAT] [--degree=per]`
+    );
     process.exit(1);
   }
+
+  // F4: titulación objetivo del barrido (por defecto PER).
+  const degreeSlug = values.degree ?? "per";
 
   let targets: CcaaCode[];
   if (values.ccaa) {
@@ -475,18 +484,28 @@ async function main() {
 
   const { data: degree, error: degreeError } = await supabase
     .from("degrees")
-    .select("id")
-    .eq("slug", "per")
-    .single();
+    .select("id, slug")
+    .eq("slug", degreeSlug)
+    .maybeSingle();
   if (degreeError) throw new Error(`degrees: ${degreeError.message}`);
+  if (!degree) {
+    const { data: all } = await supabase.from("degrees").select("slug").order("orden");
+    console.error(
+      `Titulación desconocida: ${degreeSlug}. Sembradas: ${(all ?? []).map((d) => d.slug).join(", ")}`
+    );
+    process.exit(1);
+  }
+  const degreeLabel = degree.slug.toUpperCase();
 
   const usage: Usage = { input: 0, output: 0, searches: 0 };
   let created = 0;
 
   for (const ccaa of targets) {
-    console.log(`\n▸ ${scope} · ${ccaa} (fuentes: ${allowedDomains(ccaa).join(", ")})`);
+    console.log(
+      `\n▸ ${scope} · ${degreeLabel} · ${ccaa} (fuentes: ${allowedDomains(ccaa).join(", ")})`
+    );
 
-    const result = await extract(client, scope, ccaa, usage);
+    const result = await extract(client, scope, ccaa, degreeLabel, usage);
     if (result.ccaa !== ccaa) {
       console.warn(`  El modelo devolvió ccaa=${result.ccaa}; se fuerza ${ccaa}.`);
       result.ccaa = ccaa;
@@ -506,6 +525,8 @@ async function main() {
           ccaa: changeset.ccaa,
           target_table: changeset.target_table,
           target_id: changeset.target_id,
+          // Las escuelas no pertenecen a una titulación concreta.
+          degree_id: changeset.target_table === "schools" ? null : degree.id,
           diff: changeset.diff as Json,
           fuentes: changeset.fuentes as Json,
           estado: "pending",
