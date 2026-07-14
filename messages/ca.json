@@ -373,5 +373,34 @@
       "backToGuide": "Torna a la guia del PER",
       "otherCcaa": "Altres comunitats"
     }
+  },
+  "escuelas": {
+    "metaTitle": "Escoles nàutiques per preparar el PER",
+    "metaDescription": "Directori d'escoles nàutiques per comunitat autònoma i ciutat per preparar el PER: modalitats, web i escoles verificades.",
+    "title": "Escoles nàutiques",
+    "intro": "Troba una escola on preparar el PER. Filtra per comunitat i ciutat; les escoles amb insígnia han estat verificades per l'equip de RUMBO.",
+    "filterCcaa": "Comunitat autònoma",
+    "filterAll": "Totes",
+    "filterCiudad": "Ciutat",
+    "filterCiudadPlaceholder": "p. ex. Barcelona",
+    "filterSubmit": "Filtra",
+    "verifiedBadge": "Verificada",
+    "webLink": "Lloc web",
+    "empty": "Encara no hi ha escoles publicades amb aquests filtres.",
+    "count": "{count, plural, one {# escola} other {# escoles}}",
+    "modalidad": {
+      "presencial": "Presencial",
+      "online": "En línia",
+      "semipresencial": "Semipresencial"
+    },
+    "suggestTitle": "Falta una escola?",
+    "suggestIntro": "Suggereix-la amb aquest formulari. Entra a la cua de moderació i només es publica després de revisar-la.",
+    "suggestNombre": "Nom de l'escola",
+    "suggestCiudad": "Ciutat",
+    "suggestWeb": "Web (opcional)",
+    "suggestModalidades": "Modalitats",
+    "suggestSubmit": "Envia el suggeriment",
+    "suggestOk": "Gràcies! Hem rebut el teu suggeriment i el revisarem abans de publicar-lo.",
+    "suggestError": "No hem pogut registrar el suggeriment. Revisa els camps i torna-ho a provar."
   }
 }
