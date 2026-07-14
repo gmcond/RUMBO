@@ -54,12 +54,22 @@ interface StoredSession {
   endsAt: number | null;
 }
 
-export const SIMULACRO_STORAGE_KEY = "rumbo.simulacro.v1";
+/**
+ * F4: una clave por titulación, para que empezar un simulacro de PNB no pise
+ * uno de PER a medias (y viceversa). La clave legada (pre-F4, sin sufijo) solo
+ * pudo crearla un simulacro del PER y se lee/limpia como tal.
+ */
+const SIMULACRO_STORAGE_PREFIX = "rumbo.simulacro.v1";
+const LEGACY_STORAGE_KEY = SIMULACRO_STORAGE_PREFIX;
+const LEGACY_DEGREE_SLUG = "per";
 
-export function readStoredSimulacro(): StoredSession | null {
+export function simulacroStorageKey(degreeSlug: string): string {
+  return `${SIMULACRO_STORAGE_PREFIX}.${degreeSlug}`;
+}
+
+function parseStoredSession(raw: string | null): StoredSession | null {
+  if (!raw) return null;
   try {
-    const raw = window.localStorage.getItem(SIMULACRO_STORAGE_KEY);
-    if (!raw) return null;
     const parsed: unknown = JSON.parse(raw);
     if (
       parsed === null ||
@@ -76,9 +86,25 @@ export function readStoredSimulacro(): StoredSession | null {
   }
 }
 
-export function clearStoredSimulacro() {
+export function readStoredSimulacro(degreeSlug: string): StoredSession | null {
   try {
-    window.localStorage.removeItem(SIMULACRO_STORAGE_KEY);
+    const keyed = parseStoredSession(window.localStorage.getItem(simulacroStorageKey(degreeSlug)));
+    if (keyed) return keyed;
+    if (degreeSlug === LEGACY_DEGREE_SLUG) {
+      return parseStoredSession(window.localStorage.getItem(LEGACY_STORAGE_KEY));
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+export function clearStoredSimulacro(degreeSlug: string) {
+  try {
+    window.localStorage.removeItem(simulacroStorageKey(degreeSlug));
+    if (degreeSlug === LEGACY_DEGREE_SLUG) {
+      window.localStorage.removeItem(LEGACY_STORAGE_KEY);
+    }
   } catch {
     // Sin storage (modo privado antiguo): el simulacro funciona, sin reanudación.
   }
@@ -96,11 +122,14 @@ export function SimulacroRunner({
   questions: freshQuestions,
   config: freshConfig,
   modo: freshModo,
+  degreeSlug,
   autoResume,
 }: {
   questions: SimulacroQuestion[];
   config: SimulacroConfig;
   modo: SimulacroModo;
+  /** Titulación activa: acota la sesión persistida a su propia clave. */
+  degreeSlug: string;
   autoResume?: boolean;
 }) {
   const t = useTranslations("study.simulacro");
@@ -130,7 +159,7 @@ export function SimulacroRunner({
 
   const startFresh = useCallback(() => {
     const now = Date.now();
-    clearStoredSimulacro();
+    clearStoredSimulacro(degreeSlug);
     setModo(freshModo);
     setConfig(freshConfig);
     setQuestions(freshQuestions);
@@ -142,7 +171,7 @@ export function SimulacroRunner({
     setEndsAt(freshModo === "examen" ? now + freshConfig.duracionMin * 60_000 : null);
     setNowTick(now);
     setPhase("running");
-  }, [freshConfig, freshModo, freshQuestions]);
+  }, [freshConfig, freshModo, freshQuestions, degreeSlug]);
 
   const restore = useCallback((session: StoredSession) => {
     setModo(session.modo);
@@ -164,7 +193,7 @@ export function SimulacroRunner({
     if (phase !== "boot") return;
     /* eslint-disable react-hooks/set-state-in-effect -- hidratación desde
        localStorage: solo puede decidirse en cliente, tras el primer render */
-    const stored = readStoredSimulacro();
+    const stored = readStoredSimulacro(degreeSlug);
     if (!stored) {
       startFresh();
     } else if (autoResume) {
@@ -177,7 +206,7 @@ export function SimulacroRunner({
       setPhase("deciding");
     }
     /* eslint-enable react-hooks/set-state-in-effect */
-  }, [phase, autoResume, restore, startFresh]);
+  }, [phase, autoResume, restore, startFresh, degreeSlug]);
 
   // Persistencia continua de la sesión en curso.
   useEffect(() => {
@@ -195,11 +224,23 @@ export function SimulacroRunner({
       endsAt,
     };
     try {
-      window.localStorage.setItem(SIMULACRO_STORAGE_KEY, JSON.stringify(session));
+      window.localStorage.setItem(simulacroStorageKey(degreeSlug), JSON.stringify(session));
     } catch {
       // Storage lleno o bloqueado: seguimos sin persistencia.
     }
-  }, [phase, modo, config, questions, selected, marked, revealed, index, startedAt, endsAt]);
+  }, [
+    phase,
+    modo,
+    config,
+    questions,
+    selected,
+    marked,
+    revealed,
+    index,
+    startedAt,
+    endsAt,
+    degreeSlug,
+  ]);
 
   // Reloj: recalcula siempre desde Date.now(), nunca decrementa un contador.
   useEffect(() => {
@@ -266,7 +307,7 @@ export function SimulacroRunner({
             );
             simResult = { ...graded, veredicto: grade.veredicto, motivos: grade.motivos };
           }
-          clearStoredSimulacro();
+          clearStoredSimulacro(degreeSlug);
           setFinalSeconds(duracionSeg);
           setResult(simResult);
           setPhase("finished");
@@ -277,7 +318,7 @@ export function SimulacroRunner({
         }
       });
     },
-    [phase, unanswered, questions, selected, modo, config, remaining, elapsed, t]
+    [phase, unanswered, questions, selected, modo, config, remaining, elapsed, t, degreeSlug]
   );
 
   // Tiempo agotado en modo examen → corrección automática (blanco = fallo).

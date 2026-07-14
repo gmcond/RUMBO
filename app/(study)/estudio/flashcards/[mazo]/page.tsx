@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 
 import { ReviewSession } from "@/components/study/review-session";
 import { Button } from "@/components/ui/button";
-import { getDegree, getUnitsForDegree, parseUnidadParam } from "@/lib/study/data";
+import { getActiveDegree, getUnitsForDegree, parseUnidadParam } from "@/lib/study/data";
 import { buildFailsQueue, buildUnitQueue, type SessionCard } from "@/lib/study/srs-queue";
 import { createClient } from "@/lib/supabase/server";
 
@@ -23,18 +23,19 @@ export default async function DeckPage({ params }: { params: Promise<{ mazo: str
   const t = await getTranslations("study.flashcards");
   const now = new Date();
 
+  const degree = await getActiveDegree(supabase);
+  if (!degree) notFound();
+  const units = await getUnitsForDegree(supabase, degree.id);
+
   let cards: SessionCard[];
   let deckTitle: string;
 
   if (mazo === "fallos") {
-    cards = await buildFailsQueue(supabase, now);
+    cards = await buildFailsQueue(supabase, now, new Set<string | null>(units.map((u) => u.id)));
     deckTitle = t("failsDeck");
   } else {
     const numero = parseUnidadParam(mazo);
     if (!numero) notFound();
-    const degree = await getDegree(supabase, "per");
-    if (!degree) notFound();
-    const units = await getUnitsForDegree(supabase, degree.id);
     const unit = units.find((u) => u.numero === numero);
     if (!unit) notFound();
     cards = await buildUnitQueue(supabase, user.id, unit.id, now);

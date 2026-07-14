@@ -10,7 +10,12 @@ import {
 } from "@/components/study/simulacro-runner";
 import { Button } from "@/components/ui/button";
 import { parseDistribucion, parseTopes } from "@/lib/exam-grading";
-import { getDegree, getUnitsForDegree, parseOpciones, shuffleOptions } from "@/lib/study/data";
+import {
+  getActiveDegree,
+  getUnitsForDegree,
+  parseOpciones,
+  shuffleOptions,
+} from "@/lib/study/data";
 import { buildSimulacroPool } from "@/lib/study/simulacro";
 import type { Json } from "@/lib/supabase/database.types";
 import { createClient } from "@/lib/supabase/server";
@@ -55,7 +60,7 @@ export default async function SimulacroActivoPage({
     </Button>
   );
 
-  const degree = await getDegree(supabase, "per");
+  const degree = await getActiveDegree(supabase);
   if (!degree) return null;
 
   const { data: config } = await supabase
@@ -145,6 +150,7 @@ export default async function SimulacroActivoPage({
         topes: parseTopes(config.topes),
       }}
       modo={modo}
+      degreeSlug={degree.slug}
       autoResume={autoResume}
     />
   );

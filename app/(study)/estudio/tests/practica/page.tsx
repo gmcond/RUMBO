@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { TestRunner, type TestQuestion } from "@/components/study/test-runner";
 import { Button } from "@/components/ui/button";
 import {
-  getDegree,
+  getActiveDegree,
   getLastAnswerMap,
   getUnitsForDegree,
   parseOpciones,
@@ -61,7 +61,7 @@ export default async function PracticaPage({
     );
   }
 
-  const degree = await getDegree(supabase, "per");
+  const degree = await getActiveDegree(supabase);
   if (!degree) return null;
   const units = await getUnitsForDegree(supabase, degree.id);
   const selectedUnits = units.filter((u) => unidades.includes(u.numero));

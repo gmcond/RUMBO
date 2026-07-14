@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CCAA } from "@/lib/ccaa";
 import { parseTopes } from "@/lib/exam-grading";
-import { getDegree } from "@/lib/study/data";
+import { getActiveDegree } from "@/lib/study/data";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Simulador de examen" };
@@ -28,20 +28,31 @@ export default async function SimulacroPage() {
   const t = await getTranslations("study.simulacro");
   const supabase = await createClient();
 
-  const degree = await getDegree(supabase, "per");
+  const degree = await getActiveDegree(supabase);
   if (!degree) return null;
 
-  const [{ data: configs, error }, { data: simulacros }, profileCcaa] = await Promise.all([
-    supabase
-      .from("exam_configs")
-      .select("id, ccaa, num_preguntas, duracion_min, min_aciertos, topes")
-      .eq("degree_id", degree.id)
-      .order("ccaa"),
-    supabase
-      .from("attempts")
-      .select("id, aciertos, veredicto, respuestas, duracion_seg, created_at")
-      .eq("tipo", "simulacro")
-      .order("created_at", { ascending: true }),
+  // El historial se acota a los simulacros de la titulación activa vía sus
+  // exam_configs, así que estas se resuelven primero.
+  const { data: configs, error } = await supabase
+    .from("exam_configs")
+    .select("id, ccaa, num_preguntas, duracion_min, min_aciertos, topes")
+    .eq("degree_id", degree.id)
+    .order("ccaa");
+  if (error) throw new Error(`exam_configs: ${error.message}`);
+
+  const [{ data: degrees }, { data: simulacros }, profileCcaa] = await Promise.all([
+    supabase.from("degrees").select("slug, nombre"),
+    (configs ?? []).length > 0
+      ? supabase
+          .from("attempts")
+          .select("id, aciertos, veredicto, respuestas, duracion_seg, created_at")
+          .eq("tipo", "simulacro")
+          .in(
+            "exam_config_id",
+            (configs ?? []).map((c) => c.id)
+          )
+          .order("created_at", { ascending: true })
+      : Promise.resolve({ data: [] }),
     (async () => {
       const {
         data: { user },
@@ -55,11 +66,12 @@ export default async function SimulacroPage() {
       return profile?.ccaa_objetivo ?? null;
     })(),
   ]);
-  if (error) throw new Error(`exam_configs: ${error.message}`);
 
   if (!configs || configs.length === 0) {
     return <p className="text-muted-foreground">{t("noConfig")}</p>;
   }
+
+  const degreeNames = Object.fromEntries((degrees ?? []).map((d) => [d.slug, d.nombre]));
 
   // Por defecto: la comunidad del perfil si tiene config; si no, Cataluña.
   const defaultConfig =
@@ -89,7 +101,7 @@ export default async function SimulacroPage() {
         <p className="text-muted-foreground mt-1">{t("subtitle")}</p>
       </div>
 
-      <SimulacroResumeBanner />
+      <SimulacroResumeBanner activeDegreeSlug={degree.slug} degreeNames={degreeNames} />
 
       <form action="/estudio/simulacro/activo" method="get" className="flex flex-col gap-4">
         <Card>

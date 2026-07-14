@@ -27,13 +27,71 @@ export function parseUnidadParam(param: string): number | null {
   return numero >= 1 && numero <= 11 ? numero : null;
 }
 
-export async function getDegree(supabase: ServerSupabase, slug: string) {
+export interface DegreeSummary {
+  id: string;
+  slug: string;
+  nombre: string;
+  descripcion: string | null;
+}
+
+export async function getDegree(
+  supabase: ServerSupabase,
+  slug: string
+): Promise<DegreeSummary | null> {
   const { data } = await supabase
     .from("degrees")
     .select("id, slug, nombre, descripcion")
     .eq("slug", slug)
     .maybeSingle();
   return data;
+}
+
+/** Slug de reserva cuando el perfil aún no tiene titulación (pre-F4 u onboarding a medias). */
+export const DEFAULT_DEGREE_SLUG = "per";
+
+/**
+ * Titulación activa del usuario: la de `profiles.degree_objetivo`, con
+ * fallback al PER. Toda el área de estudio filtra por ella (PRD §M6).
+ */
+export async function getActiveDegree(supabase: ServerSupabase): Promise<DegreeSummary | null> {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("degree_objetivo")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (profile?.degree_objetivo) {
+      const { data } = await supabase
+        .from("degrees")
+        .select("id, slug, nombre, descripcion")
+        .eq("id", profile.degree_objetivo)
+        .maybeSingle();
+      if (data) return data;
+    }
+  }
+
+  return getDegree(supabase, DEFAULT_DEGREE_SLUG);
+}
+
+/**
+ * ¿Pertenece un attempt a la titulación? Sí cuando todas las UT de su
+ * desglose están en el temario (las unidades se comparten entre titulaciones,
+ * así que un test de UT3 cuenta para PER y PNB; uno con UT7+ solo para PER).
+ */
+export function attemptBelongsToDegree(
+  desglosePorUt: Json,
+  degreeUnitNumbers: ReadonlySet<number>
+): boolean {
+  if (desglosePorUt === null || typeof desglosePorUt !== "object" || Array.isArray(desglosePorUt)) {
+    return false;
+  }
+  const keys = Object.keys(desglosePorUt);
+  return keys.length > 0 && keys.every((k) => degreeUnitNumbers.has(Number(k)));
 }
 
 export async function getUnitsForDegree(

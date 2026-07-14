@@ -9,9 +9,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { parseTopes, type UnitBreakdown } from "@/lib/exam-grading";
-import { getDegree, getUnitsForDegree } from "@/lib/study/data";
+import { attemptBelongsToDegree, getActiveDegree, getUnitsForDegree } from "@/lib/study/data";
 import { computeReadiness } from "@/lib/study/readiness";
-import { getUserCards, isDue } from "@/lib/study/srs-queue";
+import { cardUnitId, getUserCards, isDue } from "@/lib/study/srs-queue";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 
@@ -40,38 +40,50 @@ export default async function StudyPage() {
   const t = await getTranslations("study");
   const now = new Date();
 
-  const degree = await getDegree(supabase, "per");
+  const degree = await getActiveDegree(supabase);
   if (!degree) {
     return <p className="text-muted-foreground">{t("panel.empty")}</p>;
   }
   const units = await getUnitsForDegree(supabase, degree.id);
   const unitIds = units.map((u) => u.id);
+  const unitIdSet = new Set<string | null>(unitIds);
+  const unitNumberSet = new Set(units.map((u) => u.numero));
 
-  const [
-    { data: lessons },
-    { data: progress },
-    cards,
-    { data: attempts },
-    { data: simulacros },
-    { data: examConfigs },
-  ] = await Promise.all([
-    supabase.from("lessons").select("id, unit_id").in("unit_id", unitIds),
-    supabase.from("lesson_progress").select("lesson_id"),
-    getUserCards(supabase),
-    supabase
-      .from("attempts")
-      .select("id, aciertos, respuestas, desglose_por_ut, created_at")
-      .eq("tipo", "test")
-      .order("created_at", { ascending: false })
-      .limit(5),
-    supabase
-      .from("attempts")
-      .select("aciertos, desglose_por_ut")
-      .eq("tipo", "simulacro")
-      .order("created_at", { ascending: false })
-      .limit(3),
-    supabase.from("exam_configs").select("ccaa, min_aciertos, topes").eq("degree_id", degree.id),
-  ]);
+  // Los simulacros se filtran por las exam_configs de la titulación activa,
+  // así que se resuelven antes que el resto de consultas.
+  const { data: examConfigs } = await supabase
+    .from("exam_configs")
+    .select("id, ccaa, min_aciertos, topes")
+    .eq("degree_id", degree.id);
+  const configIds = (examConfigs ?? []).map((c) => c.id);
+
+  const [{ data: lessons }, { data: progress }, cards, { data: allTests }, { data: simulacros }] =
+    await Promise.all([
+      supabase.from("lessons").select("id, unit_id").in("unit_id", unitIds),
+      supabase.from("lesson_progress").select("lesson_id"),
+      getUserCards(supabase),
+      supabase
+        .from("attempts")
+        .select("id, aciertos, respuestas, desglose_por_ut, created_at")
+        .eq("tipo", "test")
+        .order("created_at", { ascending: false })
+        .limit(25),
+      configIds.length > 0
+        ? supabase
+            .from("attempts")
+            .select("aciertos, desglose_por_ut")
+            .eq("tipo", "simulacro")
+            .in("exam_config_id", configIds)
+            .order("created_at", { ascending: false })
+            .limit(3)
+        : Promise.resolve({ data: [] }),
+    ]);
+
+  // Las unidades se comparten entre titulaciones: un test de UT3 cuenta para
+  // PER y PNB; uno con UT7-UT11 solo para el PER.
+  const attempts = (allTests ?? [])
+    .filter((a) => attemptBelongsToDegree(a.desglose_por_ut, unitNumberSet))
+    .slice(0, 5);
 
   // Semáforo: config de la comunidad del perfil (o Cataluña) + últimos 3 simulacros.
   const examConfig =
@@ -98,7 +110,7 @@ export default async function StudyPage() {
     byUnit.set(lesson.unit_id, bucket);
   }
 
-  const dueCount = cards.filter((c) => isDue(c, now)).length;
+  const dueCount = cards.filter((c) => unitIdSet.has(cardUnitId(c)) && isDue(c, now)).length;
   const dateFormat = new Intl.DateTimeFormat("es-ES", {
     day: "2-digit",
     month: "short",
@@ -274,11 +286,11 @@ export default async function StudyPage() {
           <CardTitle className="text-lg">{t("panel.recentTitle")}</CardTitle>
         </CardHeader>
         <CardContent>
-          {(attempts ?? []).length === 0 ? (
+          {attempts.length === 0 ? (
             <p className="text-muted-foreground text-sm">{t("panel.noTests")}</p>
           ) : (
             <ul className="divide-y">
-              {(attempts ?? []).map((attempt) => {
+              {attempts.map((attempt) => {
                 const total = Array.isArray(attempt.respuestas) ? attempt.respuestas.length : 0;
                 const desglose = (attempt.desglose_por_ut ?? {}) as Record<
                   string,
