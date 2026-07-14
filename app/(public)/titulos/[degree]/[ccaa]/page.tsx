@@ -22,20 +22,25 @@ import { enlacesValueSchema, sedesValueSchema, tasasValueSchema } from "@/lib/va
 export const revalidate = 3600;
 export const dynamicParams = false;
 
-export function generateStaticParams() {
-  return CCAA.map((c) => ({ ccaa: c.code }));
+// El generateStaticParams de la page padre NO alimenta a los segmentos hijos:
+// esta page debe devolver la combinación completa titulación × CCAA.
+export async function generateStaticParams() {
+  const supabase = createPublicClient();
+  const { data } = await supabase.from("degrees").select("slug");
+  return (data ?? []).flatMap((d) => CCAA.map((c) => ({ degree: d.slug, ccaa: c.code })));
 }
 
-type Params = { params: Promise<{ ccaa: string }> };
+type Params = { params: Promise<{ degree: string; ccaa: string }> };
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const { ccaa } = await params;
+  const { degree, ccaa } = await params;
   const meta = CCAA.find((c) => c.code === ccaa);
   if (!meta) return {};
   const t = await getTranslations("guia.ccaa");
+  const degreeLabel = degree.toUpperCase();
   return {
-    title: t("metaTitle", { name: meta.name }),
-    description: t("metaDescription", { name: meta.name }),
+    title: t("metaTitle", { degree: degreeLabel, name: meta.name }),
+    description: t("metaDescription", { degree: degreeLabel, name: meta.name }),
   };
 }
 
@@ -51,8 +56,8 @@ function formatDate(value: string | null): string {
 
 const eurFmt = new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" });
 
-export default async function PerCcaaPage({ params }: Params) {
-  const { ccaa } = await params;
+export default async function DegreeCcaaPage({ params }: Params) {
+  const { degree: degreeSlug, ccaa } = await params;
   const ccaaMeta = CCAA.find((c) => c.code === ccaa);
   if (!ccaaMeta) notFound();
 
@@ -62,25 +67,24 @@ export default async function PerCcaaPage({ params }: Params) {
   const { data: degree } = await supabase
     .from("degrees")
     .select("id")
-    .eq("slug", "per")
+    .eq("slug", degreeSlug)
     .maybeSingle();
+  if (!degree) notFound();
 
-  const [{ data: info }, { data: convocatorias }] = degree
-    ? await Promise.all([
-        supabase
-          .from("ccaa_info")
-          .select("*")
-          .eq("degree_id", degree.id)
-          .eq("ccaa", ccaa)
-          .maybeSingle(),
-        supabase
-          .from("convocatorias")
-          .select("*")
-          .eq("degree_id", degree.id)
-          .eq("ccaa", ccaa)
-          .order("fecha_examen", { ascending: true, nullsFirst: false }),
-      ])
-    : [{ data: null }, { data: null }];
+  const [{ data: info }, { data: convocatorias }] = await Promise.all([
+    supabase
+      .from("ccaa_info")
+      .select("*")
+      .eq("degree_id", degree.id)
+      .eq("ccaa", ccaa)
+      .maybeSingle(),
+    supabase
+      .from("convocatorias")
+      .select("*")
+      .eq("degree_id", degree.id)
+      .eq("ccaa", ccaa)
+      .order("fecha_examen", { ascending: true, nullsFirst: false }),
+  ]);
 
   // Los jsonb pasan por Zod antes de renderizarse: si el dato en BD no cumple
   // el esquema (p. ej. escrito a mano), se trata como pendiente en vez de romper.
@@ -92,7 +96,7 @@ export default async function PerCcaaPage({ params }: Params) {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10">
       <Link
-        href="/titulos/per"
+        href={`/titulos/${degreeSlug}`}
         className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-sm transition-colors"
       >
         <ArrowLeft className="size-4" aria-hidden />
@@ -100,7 +104,7 @@ export default async function PerCcaaPage({ params }: Params) {
       </Link>
 
       <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-        {t("title", { name: ccaaMeta.name })}
+        {t("title", { degree: degreeSlug.toUpperCase(), name: ccaaMeta.name })}
       </h1>
 
       {verified ? (
@@ -298,7 +302,7 @@ export default async function PerCcaaPage({ params }: Params) {
           {CCAA.filter((c) => c.code !== ccaa).map((c) => (
             <Link
               key={c.code}
-              href={`/titulos/per/${c.code}`}
+              href={`/titulos/${degreeSlug}/${c.code}`}
               className="hover:bg-accent hover:text-accent-foreground rounded-md border px-2.5 py-1 text-xs transition-colors"
             >
               {c.name}
