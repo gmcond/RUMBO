@@ -17,6 +17,7 @@ import path from "node:path";
 
 import { z } from "zod";
 
+import { CCAA } from "../lib/ccaa";
 import { createAdminClient } from "../lib/supabase/admin";
 import type { Database } from "../lib/supabase/database.types";
 import {
@@ -62,6 +63,35 @@ const PER_DEGREE = {
     "la travesía Península–Baleares; con la práctica de vela, las atribuciones a vela. " +
     "Edad mínima: 18 años.",
   orden: 3,
+} as const;
+
+// ── Información viva F3 (PRD §M4): ccaa_info ─────────────────────────────────
+// Solo datos verificables del PRD/manual (regla «no inventar»). Las tasas NO
+// figuran en el manual y se dejan nulas a propósito: las propone el pipeline
+// update-content (PRD §M5) y las publica el admin. last_verified_at = fecha de
+// curación del manual (12/07/2026, ver cabecera de content/seed/manual-per.md).
+const CCAA_INFO_CAT = {
+  ccaa: "CAT",
+  tasas: null,
+  sedes: null,
+  organismo: "Generalitat de Catalunya (agricultura.gencat.cat)",
+  enlaces: [
+    {
+      titulo: "Titulacions nàutiques — Generalitat de Catalunya",
+      url: "https://agricultura.gencat.cat",
+    },
+    {
+      titulo: "RD 875/2014 — títulos náuticos de recreo (BOE)",
+      url: "https://www.boe.es/buscar/act.php?id=BOE-A-2014-10344",
+    },
+  ],
+  particularidades_md: [
+    "- El **anuario de mareas** lo aporta el alumno; el tribunal entrega la **carta L105** del Estrecho de Gibraltar.",
+    "- Examen tipo test de **45 preguntas en 90 minutos**, sin penalización por fallo (blanco cuenta como fallo). APTO con ≥ 32 aciertos respetando los topes por materia: máx. 2 fallos en Balizamiento (UT5), 5 en RIPA (UT6) y 2 en Carta (UT11).",
+    "- La Generalitat publica las **plantillas de respuestas 1-3 días** después de cada examen.",
+  ].join("\n"),
+  source_url: "https://www.boe.es/buscar/act.php?id=BOE-A-2014-10344",
+  last_verified_at: "2026-07-12T00:00:00Z",
 } as const;
 
 // Definiciones de los hotspots tomadas del manual (UT1.1-1.4).
@@ -380,6 +410,29 @@ async function seedDiagrams(
   console.log(`Diagramas sembrados: ${DIAGRAMS.length}`);
 }
 
+/**
+ * ccaa_info (F3): Cataluña con los datos del manual y el resto de CCAA como
+ * plantilla «pendiente de verificación» (campos nulos, last_verified_at null).
+ * Insert-if-missing: NUNCA pisa filas existentes — su ciclo de vida posterior
+ * pertenece al pipeline de changesets y al admin.
+ */
+async function seedCcaaInfo(
+  supabase: ReturnType<typeof createAdminClient>,
+  degreeId: string
+): Promise<void> {
+  const rows = CCAA.map((c) =>
+    c.code === "CAT"
+      ? { degree_id: degreeId, ...CCAA_INFO_CAT, enlaces: [...CCAA_INFO_CAT.enlaces] }
+      : { degree_id: degreeId, ccaa: c.code }
+  );
+
+  const { error } = await supabase
+    .from("ccaa_info")
+    .upsert(rows, { onConflict: "degree_id,ccaa", ignoreDuplicates: true });
+  if (error) throw new Error(`ccaa_info: ${error.message}`);
+  console.log(`ccaa_info sembrado: CAT con datos del manual + ${CCAA.length - 1} plantillas`);
+}
+
 async function main() {
   const markdown = readFileSync(MANUAL_PATH, "utf8");
   const units = parseUnits(markdown);
@@ -466,6 +519,9 @@ async function main() {
   await seedConcepts(supabase, unitIdByNumero, concepts);
   await seedQuestions(supabase, unitIdByNumero, manualQuestions, extraQuestions);
   await seedDiagrams(supabase, unitIdByNumero);
+
+  // 5 · Información viva de la Guía del título (F3)
+  await seedCcaaInfo(supabase, degree.id);
 
   console.log("Seed completado sin errores ✔");
 }
