@@ -49,6 +49,30 @@ const EXAM_CONFIG_CAT = {
     "El tribunal entrega la carta L105; el anuario de mareas lo aporta el alumno.",
 } as const;
 
+// F4 (PRD §M6): el examen PNB según RD 875/2014 Anexo II.2.B, coincidente con
+// la estructura publicada por la ECNPC/gencat para Cataluña (verificado
+// 14/07/2026). Doble criterio: ≥17 aciertos y topes de errores en UT5/UT6
+// («mínimo 3 de 5 en balizamiento y 5 de 10 en RIPA» ⇔ máx. 2 y 5 fallos).
+const EXAM_CONFIG_PNB_CAT = {
+  ccaa: "CAT",
+  num_preguntas: 27,
+  duracion_min: 45,
+  min_aciertos: 17,
+  distribucion: { 1: 4, 2: 2, 3: 4, 4: 2, 5: 5, 6: 10 },
+  topes: { 5: 2, 6: 5 },
+  notas:
+    "Sin penalización por fallo; pregunta en blanco cuenta como fallo. " +
+    "Estructura según Anexo II.2.B del RD 875/2014 (BOE-A-2014-10344) y documento " +
+    "de estructura del examen PNB de la ECNPC " +
+    "(https://agricultura.gencat.cat/web/.content/10-nautica-busseig/nautica-esbarjo/" +
+    "enllacos-documents/estructures-examens-teorics/fitxers-binaris/" +
+    "estructura-examen-teoric-patro-navegacio-basica.pdf).",
+} as const;
+
+// Nº de unidades del temario PNB: UT1-UT6, compartidas con el PER
+// (RD 875/2014, Anexo II.2 — mismos números y materias que las 6 primeras del PER).
+const PNB_UNIT_COUNT = 6;
+
 const PER_DEGREE = {
   slug: "per",
   nombre: "Patrón de Embarcaciones de Recreo (PER)",
@@ -63,6 +87,23 @@ const PER_DEGREE = {
     "la travesía Península–Baleares; con la práctica de vela, las atribuciones a vela. " +
     "Edad mínima: 18 años.",
   orden: 3,
+} as const;
+
+const PNB_DEGREE = {
+  slug: "pnb",
+  nombre: "Patrón para Navegación Básica (PNB)",
+  descripcion:
+    "Habilita para el gobierno de embarcaciones de recreo a motor de hasta 8 metros de " +
+    "eslora y de motos náuticas, sin alejarse más de 5 millas de un puerto, marina o " +
+    "lugar de abrigo, ampliable a vela con la práctica complementaria.",
+  atribuciones_md:
+    "Según el art. 8.d del RD 875/2014: gobierno de embarcaciones de recreo a motor de " +
+    "hasta 8 m de eslora, siempre que la embarcación no se aleje más de 5 millas en " +
+    "cualquier dirección de un puerto, marina o lugar de abrigo, y gobierno de motos " +
+    "náuticas dentro de sus límites específicos. Con la práctica complementaria de vela " +
+    "(art. 9.d) se amplía al gobierno de embarcaciones a vela de hasta 8 m. Edad mínima: " +
+    "18 años, o 16 con consentimiento de padres o tutores (art. 13.2).",
+  orden: 2,
 } as const;
 
 // ── Información viva F3 (PRD §M4): ccaa_info ─────────────────────────────────
@@ -92,6 +133,33 @@ const CCAA_INFO_CAT = {
   ].join("\n"),
   source_url: "https://www.boe.es/buscar/act.php?id=BOE-A-2014-10344",
   last_verified_at: "2026-07-12T00:00:00Z",
+} as const;
+
+// F4: datos verificados el 14/07/2026 contra la estructura oficial del examen
+// PNB publicada por la ECNPC (gencat). Tasas nulas a propósito (pipeline M5).
+const CCAA_INFO_PNB_CAT = {
+  ccaa: "CAT",
+  tasas: null,
+  sedes: null,
+  organismo: "Generalitat de Catalunya (agricultura.gencat.cat)",
+  enlaces: [
+    {
+      titulo: "Patró/ona de navegació bàsica — Generalitat de Catalunya",
+      url: "https://agricultura.gencat.cat/ca/ambits/nautica-busseig/nautica-esbarjo/obtenir-titol/patro-navegacio-basica/",
+    },
+    {
+      titulo: "RD 875/2014 — títulos náuticos de recreo (BOE)",
+      url: "https://www.boe.es/buscar/act.php?id=BOE-A-2014-10344",
+    },
+  ],
+  particularidades_md: [
+    "- Examen tipo test de **27 preguntas en 45 minutos**, sin penalización por fallo (blanco cuenta como fallo). APTO con ≥ 17 aciertos respetando los topes por materia: máx. 2 fallos en Balizamiento (UT5) y 5 en RIPA (UT6).",
+    "- El temario son las **unidades UT1 a UT6 del PER** (RD 875/2014, Anexo II.2).",
+    "- La Generalitat publica las **plantillas de respuestas 1-3 días** después de cada examen.",
+  ].join("\n"),
+  source_url:
+    "https://agricultura.gencat.cat/web/.content/10-nautica-busseig/nautica-esbarjo/enllacos-documents/estructures-examens-teorics/fitxers-binaris/estructura-examen-teoric-patro-navegacio-basica.pdf",
+  last_verified_at: "2026-07-14T00:00:00Z",
 } as const;
 
 // Definiciones de los hotspots tomadas del manual (UT1.1-1.4).
@@ -248,6 +316,18 @@ function assertSeedInvariants(
     throw new Error(
       `La distribución suma ${totalDistribucion}, no ${EXAM_CONFIG_CAT.num_preguntas}`
     );
+  }
+
+  // F4: coherencia del examen PNB (Anexo II.2.B) con las unidades compartidas
+  const distribucionPnb = Object.entries(EXAM_CONFIG_PNB_CAT.distribucion);
+  const totalPnb = distribucionPnb.reduce((a, [, n]) => a + n, 0);
+  if (totalPnb !== EXAM_CONFIG_PNB_CAT.num_preguntas) {
+    throw new Error(
+      `La distribución PNB suma ${totalPnb}, no ${EXAM_CONFIG_PNB_CAT.num_preguntas}`
+    );
+  }
+  if (distribucionPnb.some(([ut]) => Number(ut) < 1 || Number(ut) > PNB_UNIT_COUNT)) {
+    throw new Error(`La distribución PNB solo puede usar UT1-UT${PNB_UNIT_COUNT}`);
   }
 
   // F1: cobertura mínima del módulo de estudio (PRD §8-F1)
@@ -418,11 +498,12 @@ async function seedDiagrams(
  */
 async function seedCcaaInfo(
   supabase: ReturnType<typeof createAdminClient>,
-  degreeId: string
+  degreeId: string,
+  catInfo: typeof CCAA_INFO_CAT | typeof CCAA_INFO_PNB_CAT
 ): Promise<void> {
   const rows = CCAA.map((c) =>
     c.code === "CAT"
-      ? { degree_id: degreeId, ...CCAA_INFO_CAT, enlaces: [...CCAA_INFO_CAT.enlaces] }
+      ? { degree_id: degreeId, ...catInfo, enlaces: [...catInfo.enlaces] }
       : { degree_id: degreeId, ccaa: c.code }
   );
 
@@ -430,7 +511,7 @@ async function seedCcaaInfo(
     .from("ccaa_info")
     .upsert(rows, { onConflict: "degree_id,ccaa", ignoreDuplicates: true });
   if (error) throw new Error(`ccaa_info: ${error.message}`);
-  console.log(`ccaa_info sembrado: CAT con datos del manual + ${CCAA.length - 1} plantillas`);
+  console.log(`ccaa_info sembrado: CAT con datos verificados + ${CCAA.length - 1} plantillas`);
 }
 
 async function main() {
@@ -521,7 +602,36 @@ async function main() {
   await seedDiagrams(supabase, unitIdByNumero);
 
   // 5 · Información viva de la Guía del título (F3)
-  await seedCcaaInfo(supabase, degree.id);
+  await seedCcaaInfo(supabase, degree.id, CCAA_INFO_CAT);
+
+  // 6 · Titulación PNB (F4, PRD §M6): comparte las UT1-UT6 del PER vía degree_units
+  const { data: pnbDegree, error: pnbError } = await supabase
+    .from("degrees")
+    .upsert(PNB_DEGREE, { onConflict: "slug" })
+    .select("id")
+    .single();
+  if (pnbError) throw new Error(`degrees (pnb): ${pnbError.message}`);
+  console.log(`Degree PNB: ${pnbDegree.id}`);
+
+  const pnbLinks = Array.from({ length: PNB_UNIT_COUNT }, (_, i) => {
+    const numero = i + 1;
+    const unit_id = unitIdByNumero.get(numero);
+    if (!unit_id) throw new Error(`UT${numero} sin id para vincular al PNB`);
+    return { degree_id: pnbDegree.id, unit_id, orden: numero };
+  });
+  const { error: pnbLinkError } = await supabase
+    .from("degree_units")
+    .upsert(pnbLinks, { onConflict: "degree_id,unit_id" });
+  if (pnbLinkError) throw new Error(`degree_units (pnb): ${pnbLinkError.message}`);
+  console.log(`PNB vinculado a UT1-UT${PNB_UNIT_COUNT} del PER`);
+
+  const { error: pnbConfigError } = await supabase
+    .from("exam_configs")
+    .upsert({ degree_id: pnbDegree.id, ...EXAM_CONFIG_PNB_CAT }, { onConflict: "degree_id,ccaa" });
+  if (pnbConfigError) throw new Error(`exam_configs (pnb): ${pnbConfigError.message}`);
+  console.log("exam_config PNB/CAT sembrado (27 preguntas / 45 min / ≥17 / topes 2-5)");
+
+  await seedCcaaInfo(supabase, pnbDegree.id, CCAA_INFO_PNB_CAT);
 
   console.log("Seed completado sin errores ✔");
 }
