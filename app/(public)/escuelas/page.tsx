@@ -150,7 +150,10 @@ export default async function EscuelasPage({ searchParams }: SearchParams) {
             </p>
           )}
           {params.sugerencia === "error" && (
-            <p role="alert" className="border-destructive/40 bg-destructive/10 mb-4 rounded-md border p-3 text-sm">
+            <p
+              role="alert"
+              className="border-destructive/40 bg-destructive/10 mb-4 rounded-md border p-3 text-sm"
+            >
               {t("suggestError")}
             </p>
           )}

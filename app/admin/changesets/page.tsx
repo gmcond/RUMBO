@@ -102,7 +102,11 @@ export default async function AdminChangesetsPage({
                   <TableCell>{c.ccaa ?? "—"}</TableCell>
                   <TableCell className="text-muted-foreground">
                     {c.target_table}
-                    {!c.target_id && <Badge variant="outline" className="ml-2">{t("newRow")}</Badge>}
+                    {!c.target_id && (
+                      <Badge variant="outline" className="ml-2">
+                        {t("newRow")}
+                      </Badge>
+                    )}
                   </TableCell>
                   <TableCell className="text-right tabular-nums">
                     {Object.keys((c.diff as object) ?? {}).length}

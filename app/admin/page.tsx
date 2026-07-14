@@ -16,7 +16,10 @@ export default async function AdminPage() {
 
   const [{ count: reviewCount }, { count: changesetCount }, { count: schoolCount }] =
     await Promise.all([
-      supabase.from("questions").select("id", { count: "exact", head: true }).eq("estado", "review"),
+      supabase
+        .from("questions")
+        .select("id", { count: "exact", head: true })
+        .eq("estado", "review"),
       supabase
         .from("content_changesets")
         .select("id", { count: "exact", head: true })

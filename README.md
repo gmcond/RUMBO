@@ -70,12 +70,52 @@ npm run build      # build de producción (debe pasar limpio antes de commit)
 
 ## Comandos de datos
 
-| Comando                  | Qué hace                                                            |
-| ------------------------ | ------------------------------------------------------------------- |
-| `npm run db:migrate`     | Aplica las migraciones de `supabase/migrations/` al proyecto linked |
-| `npm run db:types`       | Regenera los tipos TS desde el esquema remoto                       |
-| `npm run seed`           | Siembra PER, 11 UT y exam_config CAT desde `content/seed/`          |
-| `npm run update-content` | Pipeline IA de actualización (llega en Fase 3)                      |
+| Comando                  | Qué hace                                                              |
+| ------------------------ | --------------------------------------------------------------------- |
+| `npm run db:migrate`     | Aplica las migraciones de `supabase/migrations/` al proyecto linked   |
+| `npm run db:types`       | Regenera los tipos TS desde el esquema remoto                         |
+| `npm run seed`           | Siembra PER, 11 UT, exam_config CAT y ccaa_info desde `content/seed/` |
+| `npm run update-content` | Pipeline IA de actualización de información viva (ver abajo)          |
+
+## Pipeline de contenido (`update-content`)
+
+Actualización semi-automática de la información viva de la Guía del título
+(PRD §M5). **Nada se publica sin aprobación humana**: el script solo genera
+propuestas.
+
+```bash
+npm run update-content -- --scope=tasas --ccaa=CAT
+# scopes: tasas | convocatorias | normativa | escuelas
+# --ccaa opcional; sin él itera las 19 CCAA (una llamada por CCAA)
+```
+
+Flujo completo:
+
+1. **Extracción** — una llamada a `claude-sonnet-4-6` con la herramienta de
+   web search (`web_search_20260318`) restringida por `allowed_domains` a la
+   whitelist de fuentes oficiales (BOE, transportes.gob.es y los portales
+   autonómicos: gencat para CAT). La restricción se impone a nivel de API,
+   no solo de prompt.
+2. **Validación** — la respuesta JSON se valida con Zod
+   (`lib/validation/content.ts`); cada campo lleva su `source_url` y
+   `confidence`. Un campo citado fuera de la whitelist se descarta.
+3. **Diff** — se compara con la fila actual de la BD
+   (`lib/content-diff.ts`) y, si hay cambios, se inserta un changeset
+   `pending` en `content_changesets` (service role). El script **jamás
+   escribe en tablas públicas**.
+4. **Revisión** — en `/admin/changesets` se ve el diff campo a campo
+   (valor actual → propuesto, con fuente y confianza por campo), editable.
+5. **Publicación** — al aprobar, el cambio se aplica a la tabla destino con
+   la sesión del admin bajo RLS, se sella `last_verified_at`, se registra en
+   `content_audit_log` y se revalidan las páginas públicas. Rechazar deja
+   constancia de revisor y fecha.
+
+**Coste por ejecución** (medido el 14/07/2026, scope `tasas` de una CCAA):
+**≈ $0,85** (236k tokens de entrada, 5,5k de salida y 6 búsquedas). Esa
+ejecución incluyó un reintento de validación hoy ya innecesario (esquema de
+sedes tolerante); sin reintento el coste esperable es **~$0,40-0,50 por CCAA**
+(~$8-10 si se recorren las 19). El script imprime tokens, búsquedas
+($10/1000) y coste estimado al final de cada ejecución.
 
 ## Deploy en Vercel
 
@@ -103,9 +143,9 @@ docs/PRD.md        documento de producto (fuente de verdad)
 ## Estado del proyecto
 
 - ✅ **Fase 0 — Fundación**: scaffolding, esquema con RLS, auth email+password, landing, seed, CI
-- ⏳ Fase 1 — Estudio PER (lecciones, SRS, diagramas, tests)
-- ⏳ Fase 2 — Simulador de examen + trainer de carta
-- ⏳ Fase 3 — Guía del título + pipeline IA de contenido
+- ✅ **Fase 1 — Estudio PER**: lecciones, SRS, diagramas, tests, banco de preguntas
+- ✅ **Fase 2 — Simulador + Carta**: simulacros con topes eliminatorios, histórico, trainer de carta
+- ✅ **Fase 3 — Guía del título + pipeline IA**: páginas públicas por CCAA, escuelas, changesets con aprobación admin
 - ⏳ Fases 4-6 — Multi-titulación y marketplaces
 
 ## Licencia y contenido

@@ -124,7 +124,10 @@ export default async function PerCcaaPage({ params }: Params) {
       ) : (
         <div className="mt-4 rounded-md border border-amber-500/40 bg-amber-500/10 p-4">
           <p className="flex items-center gap-2 font-medium">
-            <CircleAlert className="size-4 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden />
+            <CircleAlert
+              className="size-4 shrink-0 text-amber-600 dark:text-amber-400"
+              aria-hidden
+            />
             {t("pendingTitle")}
           </p>
           <p className="text-muted-foreground mt-1 text-sm">
@@ -203,7 +206,9 @@ export default async function PerCcaaPage({ params }: Params) {
                         <TableCell>{conv.sede ?? "—"}</TableCell>
                         <TableCell>
                           <Badge
-                            variant={conv.estado === "inscripcion_abierta" ? "default" : "secondary"}
+                            variant={
+                              conv.estado === "inscripcion_abierta" ? "default" : "secondary"
+                            }
                           >
                             {t(`estado.${conv.estado}`)}
                           </Badge>
