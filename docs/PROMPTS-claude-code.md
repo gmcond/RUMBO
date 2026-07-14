@@ -175,7 +175,40 @@ simular sin que haya hecho falta código nuevo específico de PNB (solo datos).
 
 ---
 
-## 6 · PROMPT FASE 5 — Marketplaces de amarres y embarcaciones
+## 6 · PROMPT FASE 4.5 — Rediseño UI (pre-lanzamiento)
+
+```text
+Lee PRD §8-F4.5 y §4 (presupuesto de rendimiento). Plan primero.
+
+Fase intermedia antes de F5: rediseño visual para dejar RUMBO listo
+para publicarse en un dominio propio.
+
+1. ANTES de tocar código: presenta 2-3 direcciones de arte claramente
+   distintas para elegir. Cada una con: nombre y personalidad, paleta
+   completa (tokens claro/oscuro), par tipográfico (Google Fonts),
+   estilo de componentes (radios, sombras, densidad), tratamiento del
+   wordmark RUMBO, y mockup de landing + panel de estudio en ambos
+   modos. Evitar el look genérico de plantilla. Espera la elección.
+2. Tras la elección: design tokens centralizados (Tailwind/shadcn,
+   claro y oscuro) y tipografía global; landing renovada orientada a
+   conversión (hero, propuesta de valor, CTA de registro); área de
+   estudio pulida (panel, tarjetas, progreso, semáforo, flashcards,
+   runner de tests/simulacro, trainer de carta, estados vacíos); guía
+   pública /titulos y /escuelas al nuevo estilo; microinteracciones
+   sobrias; accesibilidad AA. Checkpoint visual con el product owner
+   cuando la landing real esté al nuevo estilo, antes de pintar el
+   resto de la app.
+3. Restricciones duras: cero cambios de lógica, BD o RLS; e2e en verde
+   (ajustar selectores si hace falta, nunca comportamiento);
+   mobile-first 390 px; build limpio y LCP móvil dentro del presupuesto.
+
+Criterio de cierre: se puede enseñar RUMBO desde el móvil a un
+desconocido y parece un producto publicable, sin regresión funcional.
+```
+
+---
+
+## 7 · PROMPT FASE 5 — Marketplaces de amarres y embarcaciones
 
 ```text
 Lee PRD §M7, §M8 y §8-F5. Plan primero.
@@ -201,7 +234,7 @@ mapa tras moderarlo, y otro usuario me contacta por mensajería.
 
 ---
 
-## 7 · PROMPT FASE 6 — Servicios de patrón
+## 8 · PROMPT FASE 6 — Servicios de patrón
 
 ```text
 Lee PRD §M9 y §8-F6, incluida la nota legal. Plan primero.
@@ -224,7 +257,7 @@ verificado no aparece en el directorio.
 
 ---
 
-## 8 · Consejos de uso de Claude Code para este proyecto
+## 9 · Consejos de uso de Claude Code para este proyecto
 
 - **Una fase = varias sesiones.** Si una fase es grande, pídele que la divida en tareas y usa `/clear` entre tareas para mantener el contexto limpio; CLAUDE.md se recarga siempre.
 - **Revisa los diffs** antes de aceptar cambios grandes, sobre todo migraciones y policies RLS.
