@@ -115,6 +115,62 @@ export const diffEntrySchema = z.object({
 export const changesetDiffSchema = z.record(z.string(), diffEntrySchema);
 
 /**
+ * Campos que el admin puede aprobar por tabla destino. Al aprobar un
+ * changeset, cada valor (posiblemente editado a mano) se revalida contra su
+ * esquema antes de tocar la tabla pública: un campo fuera de esta lista o un
+ * valor mal formado aborta la aprobación.
+ */
+const APPROVABLE_FIELDS = {
+  ccaa_info: {
+    tasas: tasasValueSchema.nullable(),
+    sedes: sedesValueSchema.nullable(),
+    organismo: z.string().min(3).nullable(),
+    particularidades_md: z.string().min(10).nullable(),
+    enlaces: enlacesValueSchema.nullable(),
+  },
+  convocatorias: {
+    fecha_examen: isoDate.nullable(),
+    plazo_inicio: isoDate.nullable(),
+    plazo_fin: isoDate.nullable(),
+    sede: z.string().min(2).nullable(),
+    enlace: z.string().url().nullable(),
+    estado: z.enum(["prevista", "inscripcion_abierta", "cerrada", "celebrada"]),
+  },
+  schools: {
+    nombre: z.string().min(3),
+    ciudad: z.string().min(2),
+    web: z.string().url().nullable(),
+    modalidades: z.array(z.enum(SCHOOL_MODALIDADES)),
+  },
+} satisfies Record<string, Record<string, z.ZodTypeAny>>;
+
+export type ApprovableTable = keyof typeof APPROVABLE_FIELDS;
+
+export function isApprovableTable(table: string): table is ApprovableTable {
+  return table in APPROVABLE_FIELDS;
+}
+
+export function validateApprovedFields(
+  table: ApprovableTable,
+  values: Record<string, unknown>
+): Record<string, unknown> {
+  const schemas: Record<string, z.ZodTypeAny> = APPROVABLE_FIELDS[table];
+  const out: Record<string, unknown> = {};
+
+  for (const [field, value] of Object.entries(values)) {
+    const schema = schemas[field];
+    if (!schema) throw new Error(`Campo no aprobable en ${table}: ${field}`);
+    const parsed = schema.safeParse(value);
+    if (!parsed.success) {
+      throw new Error(`Valor inválido para ${table}.${field}: ${parsed.error.issues[0].message}`);
+    }
+    out[field] = parsed.data;
+  }
+
+  return out;
+}
+
+/**
  * Formulario público de sugerencia de escuela. `empresa` es un honeypot:
  * campo oculto que un humano deja vacío; si llega relleno, se rechaza.
  */
@@ -130,4 +186,9 @@ export const schoolSuggestionSchema = z.object({
     .pipe(z.string().url().nullable()),
   modalidades: z.array(z.enum(SCHOOL_MODALIDADES)).max(3).default([]),
   empresa: z.literal(""),
+});
+
+/** Alta manual de escuela desde el admin: sin honeypot y con verificada. */
+export const schoolAdminSchema = schoolSuggestionSchema.omit({ empresa: true }).extend({
+  verificada: z.coerce.boolean().default(false),
 });
