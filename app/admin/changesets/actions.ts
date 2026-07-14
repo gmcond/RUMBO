@@ -21,7 +21,10 @@ import {
 
 const idSchema = z.string().uuid();
 
-async function loadPendingChangeset(supabase: Awaited<ReturnType<typeof createClient>>, id: string) {
+async function loadPendingChangeset(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  id: string
+) {
   const { data: changeset, error } = await supabase
     .from("content_changesets")
     .select("*")
@@ -112,7 +115,11 @@ export async function approveChangeset(formData: FormData) {
     if (!changeset.target_id) throw new Error("Changeset de ccaa_info sin fila destino");
     const { data, error } = await supabase
       .from("ccaa_info")
-      .update({ ...payload, last_verified_at: now, ...(primarySource ? { source_url: primarySource } : {}) })
+      .update({
+        ...payload,
+        last_verified_at: now,
+        ...(primarySource ? { source_url: primarySource } : {}),
+      })
       .eq("id", changeset.target_id)
       .select("id");
     if (error) throw new Error(`ccaa_info: ${error.message}`);

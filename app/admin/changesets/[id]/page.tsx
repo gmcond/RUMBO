@@ -36,11 +36,7 @@ function editableValue(value: unknown): string {
   return JSON.stringify(value, null, 2);
 }
 
-export default async function ChangesetDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function ChangesetDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const t = await getTranslations("admin.changesets");
   const supabase = await createClient();

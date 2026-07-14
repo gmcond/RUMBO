@@ -145,10 +145,14 @@ Contenido organizado en **Titulación → Unidades Teóricas (UT) → Lecciones 
 
 **Información viva (M4/M5)**
 - `ccaa_info` (id, degree_id, ccaa, tasas jsonb, sedes jsonb, organismo, enlaces jsonb, particularidades_md, source_url, last_verified_at)
-- `convocatorias` (id, degree_id, ccaa, fecha_examen, plazo_inscripcion, sede, enlace, estado)
-- `schools` (id, nombre, ccaa, ciudad, web, modalidades[], verificada bool)
-- `content_changesets` (id, scope, diff jsonb, fuentes jsonb, estado enum[pending|approved|rejected], created_by enum[ai|admin], reviewed_by, reviewed_at)
+- `convocatorias` (id, degree_id, ccaa, fecha_examen, plazo_inicio, plazo_fin, sede, enlace, estado enum[prevista|inscripcion_abierta|cerrada|celebrada], source_url, last_verified_at)
+- `schools` (id, nombre, ccaa, ciudad, web, modalidades[], verificada bool, estado enum[pending|published|rejected], origen enum[admin|sugerencia])
+- `content_changesets` (id, scope, ccaa, target_table, target_id, diff jsonb, fuentes jsonb, estado enum[pending|approved|rejected], created_by enum[ai|admin], reviewed_by, reviewed_at)
 - `content_audit_log` (id, tabla, registro_id, cambio jsonb, changeset_id, at)
+- Decisiones fijadas en F3:
+  - **Convocatorias**: el `plazo_inscripcion` original se materializa en dos columnas `date` (`plazo_inicio`, `plazo_fin`) para ordenar y calcular "inscripción abierta" sin parsear texto; cada convocatoria lleva sus propios `source_url`/`last_verified_at`.
+  - **Escuelas**: `estado` gobierna la moderación (el formulario público inserta `pending` vía RLS y solo `published` es visible); `verificada` queda como badge independiente y `origen` distingue alta manual de sugerencia.
+  - **Changesets**: `ccaa`, `target_table` y `target_id` añadidos para poder aplicar el diff al aprobar (`target_id` null = propone crear la fila). `diff` es campo a campo: `{campo: {old, new, source_url, confidence}}`.
 
 **Marketplace (M7/M8/M9)**
 - `ports` (id, nombre, ccaa, lat, lng)
