@@ -153,6 +153,9 @@ Contenido organizado en **Titulación → Unidades Teóricas (UT) → Lecciones 
   - **Convocatorias**: el `plazo_inscripcion` original se materializa en dos columnas `date` (`plazo_inicio`, `plazo_fin`) para ordenar y calcular "inscripción abierta" sin parsear texto; cada convocatoria lleva sus propios `source_url`/`last_verified_at`.
   - **Escuelas**: `estado` gobierna la moderación (el formulario público inserta `pending` vía RLS y solo `published` es visible); `verificada` queda como badge independiente y `origen` distingue alta manual de sugerencia.
   - **Changesets**: `ccaa`, `target_table` y `target_id` añadidos para poder aplicar el diff al aprobar (`target_id` null = propone crear la fila). `diff` es campo a campo: `{campo: {old, new, source_url, confidence}}`.
+- Decisión fijada en F4:
+  - **Changesets multi-título**: columna `degree_id` (la fija el pipeline vía `--degree`, default `per`; null en `schools`). Al aprobar, la titulación se resuelve por `degree_id` → fila destino → PER (fallback pre-F4); imprescindible para convocatorias nuevas (`target_id` null) de titulaciones ≠ PER y para revalidar `/titulos/[degree]`.
+  - **Examen PNB (CAT)**: 27 preguntas / 45 min / APTO ⇔ aciertos ≥ 17 ∧ fallos_UT5 ≤ 2 ∧ fallos_UT6 ≤ 5; distribución UT1→UT6 `[4,2,4,2,5,10]`. Verificado 14/07/2026 contra RD 875/2014 Anexo II.2.B y la estructura oficial de la ECNPC (gencat); ambas fuentes coinciden.
 
 **Marketplace (M7/M8/M9)**
 - `ports` (id, nombre, ccaa, lat, lng)
