@@ -8,6 +8,11 @@ const PROTECTED_ROUTES = [
   "/estudio/per/ut1",
   "/estudio/flashcards",
   "/estudio/tests",
+  "/estudio/simulacro",
+  "/estudio/simulacro/activo",
+  "/estudio/carta",
+  "/estudio/carta/calculadoras",
+  "/estudio/carta/ejercicios/correccion-total",
 ];
 
 for (const route of PROTECTED_ROUTES) {

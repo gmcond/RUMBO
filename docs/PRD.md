@@ -53,6 +53,10 @@ Contenido organizado en **Titulación → Unidades Teóricas (UT) → Lecciones 
 - Cronómetro, navegación entre preguntas, marcar para revisar, corrección final con desglose por bloque y veredicto APTO/NO APTO explicado (incluye el caso "32+ aciertos pero suspenso por tope").
 - Modo examen (sin ayudas) y modo práctica (explicación inmediata).
 - Histórico de simulacros con evolución.
+- Decisiones fijadas en F2:
+  - **Reanudación**: la sesión en curso se persiste en el cliente (localStorage: pool completo, respuestas, marcas y **hora de fin absoluta**, nunca un contador) para sobrevivir recargas/cierres en móvil sin regalar tiempo; al volver se ofrece reanudar o descartar, con aviso `beforeunload` al salir. En modo examen el pool guardado no incluye la respuesta correcta.
+  - **Cronómetro en práctica**: visible y ascendente (informativo); no hay autoenvío por tiempo. La práctica se registra como attempt `tipo='test'` (sin veredicto en BD, no computa en el semáforo) y su veredicto en pantalla es orientativo, calculado en cliente.
+  - **Semáforo de preparación** (panel, sobre los últimos 3 simulacros modo examen, por bloque eliminatorio y mínimo global): rojo si incumple el límite en el último o en 2 de 3; ámbar si lo incumplió en 1 antiguo o va al límite exacto en el último; verde si cumple con margen en todos.
 
 ### M3 · Trainer de carta náutica (UT11)
 
