@@ -373,5 +373,34 @@
       "backToGuide": "Volver a la guía del PER",
       "otherCcaa": "Otras comunidades"
     }
+  },
+  "escuelas": {
+    "metaTitle": "Escuelas náuticas para preparar el PER",
+    "metaDescription": "Directorio de escuelas náuticas por comunidad autónoma y ciudad para preparar el PER: modalidades, web y escuelas verificadas.",
+    "title": "Escuelas náuticas",
+    "intro": "Encuentra una escuela donde preparar el PER. Filtra por comunidad y ciudad; las escuelas con insignia han sido verificadas por el equipo de RUMBO.",
+    "filterCcaa": "Comunidad autónoma",
+    "filterAll": "Todas",
+    "filterCiudad": "Ciudad",
+    "filterCiudadPlaceholder": "p. ej. Barcelona",
+    "filterSubmit": "Filtrar",
+    "verifiedBadge": "Verificada",
+    "webLink": "Sitio web",
+    "empty": "No hay escuelas publicadas con esos filtros todavía.",
+    "count": "{count, plural, one {# escuela} other {# escuelas}}",
+    "modalidad": {
+      "presencial": "Presencial",
+      "online": "Online",
+      "semipresencial": "Semipresencial"
+    },
+    "suggestTitle": "¿Falta una escuela?",
+    "suggestIntro": "Sugiérela con este formulario. Entra en cola de moderación y solo se publica tras revisarla.",
+    "suggestNombre": "Nombre de la escuela",
+    "suggestCiudad": "Ciudad",
+    "suggestWeb": "Web (opcional)",
+    "suggestModalidades": "Modalidades",
+    "suggestSubmit": "Enviar sugerencia",
+    "suggestOk": "¡Gracias! Hemos recibido tu sugerencia y la revisaremos antes de publicarla.",
+    "suggestError": "No hemos podido registrar la sugerencia. Revisa los campos e inténtalo de nuevo."
   }
 }
