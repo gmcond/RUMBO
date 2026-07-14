@@ -214,6 +214,7 @@ export type Database = {
           ccaa: string | null;
           created_at: string;
           created_by: Database["public"]["Enums"]["changeset_autor"];
+          degree_id: string | null;
           diff: Json;
           estado: Database["public"]["Enums"]["changeset_estado"];
           fuentes: Json;
@@ -228,6 +229,7 @@ export type Database = {
           ccaa?: string | null;
           created_at?: string;
           created_by?: Database["public"]["Enums"]["changeset_autor"];
+          degree_id?: string | null;
           diff: Json;
           estado?: Database["public"]["Enums"]["changeset_estado"];
           fuentes?: Json;
@@ -242,6 +244,7 @@ export type Database = {
           ccaa?: string | null;
           created_at?: string;
           created_by?: Database["public"]["Enums"]["changeset_autor"];
+          degree_id?: string | null;
           diff?: Json;
           estado?: Database["public"]["Enums"]["changeset_estado"];
           fuentes?: Json;
@@ -252,7 +255,15 @@ export type Database = {
           target_id?: string | null;
           target_table?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "content_changesets_degree_id_fkey";
+            columns: ["degree_id"];
+            isOneToOne: false;
+            referencedRelation: "degrees";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       convocatorias: {
         Row: {

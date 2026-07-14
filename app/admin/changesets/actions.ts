@@ -83,13 +83,58 @@ function mergeEditedDiff(diff: ChangesetDiff, formData: FormData): ChangesetDiff
   return merged;
 }
 
-function revalidatePublicPages(targetTable: string, ccaa: string | null) {
+function revalidatePublicPages(targetTable: string, ccaa: string | null, degreeSlug: string) {
   if (targetTable === "schools") {
     revalidatePath("/escuelas");
     return;
   }
-  revalidatePath("/titulos/per");
-  if (ccaa) revalidatePath(`/titulos/per/${ccaa}`);
+  revalidatePath(`/titulos/${degreeSlug}`);
+  if (ccaa) revalidatePath(`/titulos/${degreeSlug}/${ccaa}`);
+}
+
+type PendingChangeset = Awaited<ReturnType<typeof loadPendingChangeset>>;
+
+/**
+ * Titulación del changeset (F4): la fija el pipeline en degree_id; en filas
+ * antiguas se resuelve vía la fila destino y, en último término, PER (toda
+ * fila pre-F4 lo era).
+ */
+async function resolveDegree(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  changeset: PendingChangeset
+): Promise<{ id: string; slug: string }> {
+  if (changeset.degree_id) {
+    const { data } = await supabase
+      .from("degrees")
+      .select("id, slug")
+      .eq("id", changeset.degree_id)
+      .maybeSingle();
+    if (data) return data;
+  }
+
+  if (changeset.target_id && changeset.target_table !== "schools") {
+    const { data: row } = await supabase
+      .from(changeset.target_table as "ccaa_info" | "convocatorias")
+      .select("degree_id")
+      .eq("id", changeset.target_id)
+      .maybeSingle();
+    if (row?.degree_id) {
+      const { data } = await supabase
+        .from("degrees")
+        .select("id, slug")
+        .eq("id", row.degree_id)
+        .maybeSingle();
+      if (data) return data;
+    }
+  }
+
+  const { data, error } = await supabase
+    .from("degrees")
+    .select("id, slug")
+    .eq("slug", "per")
+    .single();
+  if (error) throw new Error(`degrees: ${error.message}`);
+  return data;
 }
 
 export async function approveChangeset(formData: FormData) {
@@ -108,6 +153,7 @@ export async function approveChangeset(formData: FormData) {
   const payload = validateApprovedFields(changeset.target_table, diffToUpdatePayload(diff));
   const now = new Date().toISOString();
   const primarySource = Object.values(diff)[0]?.source_url ?? null;
+  const degree = await resolveDegree(supabase, changeset);
 
   let registroId = changeset.target_id;
 
@@ -134,14 +180,9 @@ export async function approveChangeset(formData: FormData) {
       if (error) throw new Error(`convocatorias: ${error.message}`);
     } else {
       if (!changeset.ccaa) throw new Error("Changeset de convocatoria sin CCAA");
-      const { data: degree } = await supabase
-        .from("degrees")
-        .select("id")
-        .eq("slug", "per")
-        .single();
       const { data, error } = await supabase
         .from("convocatorias")
-        .insert({ ...values, degree_id: degree!.id, ccaa: changeset.ccaa })
+        .insert({ ...values, degree_id: degree.id, ccaa: changeset.ccaa })
         .select("id")
         .single();
       if (error) throw new Error(`convocatorias: ${error.message}`);
@@ -191,7 +232,7 @@ export async function approveChangeset(formData: FormData) {
   if (auditError) throw new Error(`content_audit_log: ${auditError.message}`);
 
   await markReviewed(supabase, id, "approved");
-  revalidatePublicPages(changeset.target_table, changeset.ccaa);
+  revalidatePublicPages(changeset.target_table, changeset.ccaa, degree.slug);
   revalidatePath("/admin/changesets");
   redirect("/admin/changesets");
 }
