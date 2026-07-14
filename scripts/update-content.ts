@@ -331,9 +331,7 @@ async function buildChangesets(
     const fields = dropNonWhitelisted(result.fields, domains);
 
     // Una propuesta de tasas sin ningún importe no aporta nada que revisar.
-    const tasasValue = fields.tasas?.value as
-      | { examen: unknown; expedicion: unknown }
-      | undefined;
+    const tasasValue = fields.tasas?.value as { examen: unknown; expedicion: unknown } | undefined;
     if (tasasValue && tasasValue.examen === null && tasasValue.expedicion === null) {
       console.warn("  Campo tasas descartado: la fuente no detalla importes.");
       delete fields.tasas;
