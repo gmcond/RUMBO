@@ -70,12 +70,12 @@ npm run build      # build de producción (debe pasar limpio antes de commit)
 
 ## Comandos de datos
 
-| Comando                  | Qué hace                                                              |
-| ------------------------ | --------------------------------------------------------------------- |
-| `npm run db:migrate`     | Aplica las migraciones de `supabase/migrations/` al proyecto linked   |
-| `npm run db:types`       | Regenera los tipos TS desde el esquema remoto                         |
-| `npm run seed`           | Siembra PER, 11 UT, exam_config CAT y ccaa_info desde `content/seed/` |
-| `npm run update-content` | Pipeline IA de actualización de información viva (ver abajo)          |
+| Comando                  | Qué hace                                                            |
+| ------------------------ | ------------------------------------------------------------------- |
+| `npm run db:migrate`     | Aplica las migraciones de `supabase/migrations/` al proyecto linked |
+| `npm run db:types`       | Regenera los tipos TS desde el esquema remoto                       |
+| `npm run seed`           | Siembra PER y PNB (UT compartidas), exam_configs CAT y ccaa_info    |
+| `npm run update-content` | Pipeline IA de actualización de información viva (ver abajo)        |
 
 ## Pipeline de contenido (`update-content`)
 
@@ -85,8 +85,10 @@ propuestas.
 
 ```bash
 npm run update-content -- --scope=tasas --ccaa=CAT
+npm run update-content -- --scope=convocatorias --ccaa=CAT --degree=pnb
 # scopes: tasas | convocatorias | normativa | escuelas
 # --ccaa opcional; sin él itera las 19 CCAA (una llamada por CCAA)
+# --degree opcional (por defecto per): cualquier titulación sembrada (per, pnb…)
 ```
 
 Flujo completo:
@@ -101,8 +103,8 @@ Flujo completo:
    `confidence`. Un campo citado fuera de la whitelist se descarta.
 3. **Diff** — se compara con la fila actual de la BD
    (`lib/content-diff.ts`) y, si hay cambios, se inserta un changeset
-   `pending` en `content_changesets` (service role). El script **jamás
-   escribe en tablas públicas**.
+   `pending` en `content_changesets` (service role), con la titulación en
+   `degree_id` (F4). El script **jamás escribe en tablas públicas**.
 4. **Revisión** — en `/admin/changesets` se ve el diff campo a campo
    (valor actual → propuesto, con fuente y confianza por campo), editable.
 5. **Publicación** — al aprobar, el cambio se aplica a la tabla destino con
