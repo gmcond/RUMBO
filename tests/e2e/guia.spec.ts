@@ -23,6 +23,20 @@ test("/titulos/per/MAD muestra la plantilla pendiente de verificación", async (
   await expect(page.getByText("Datos pendientes de verificación")).toBeVisible();
 });
 
+// F4: la misma ruta [degree] sirve la guía del PNB solo con datos.
+test("/titulos/pnb muestra la guía del PNB con su examen", async ({ page }) => {
+  await page.goto("/titulos/pnb");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Guía del PNB");
+  await expect(page.getByText(/27 preguntas/).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: "Cataluña" })).toBeVisible();
+});
+
+test("/titulos/pnb/CAT muestra los datos verificados del PNB", async ({ page }) => {
+  await page.goto("/titulos/pnb/CAT");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("El PNB en Cataluña");
+  await expect(page.getByText(/Verificado el \d{2}\/\d{2}\/\d{4}/)).toBeVisible();
+});
+
 test("/escuelas lista y mantiene el filtro por CCAA en la URL", async ({ page }) => {
   await page.goto("/escuelas?ccaa=CAT");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Escuelas náuticas");
