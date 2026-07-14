@@ -38,6 +38,9 @@ export async function Navbar() {
         </Link>
 
         <div className="flex items-center gap-1 sm:gap-2">
+          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+            <Link href="/titulos/per">{t("guide")}</Link>
+          </Button>
           {user ? (
             <>
               <Button asChild variant="ghost" size="sm">
