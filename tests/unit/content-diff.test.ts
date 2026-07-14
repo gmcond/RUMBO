@@ -139,6 +139,31 @@ describe("extractionResultSchema", () => {
   });
 });
 
+describe("sedesValueSchema (vía extractionResultSchema)", () => {
+  it("acepta sedes sin ciudad y la normaliza a null (evita reintentos caros)", () => {
+    const parsed = extractionResultSchema.parse({
+      scope: "tasas",
+      ccaa: "CAT",
+      fields: {
+        tasas: {
+          value: { examen: null, expedicion: null },
+          source_url: "https://nautica.gencat.cat/taxes",
+          confidence: 0.5,
+        },
+        sedes: {
+          value: [{ nombre: "Oficina de Girona" }],
+          source_url: "https://nautica.gencat.cat/taxes",
+          confidence: 0.8,
+        },
+      },
+      fuentes: [],
+    });
+
+    if (parsed.scope !== "tasas") throw new Error("scope inesperado");
+    expect(parsed.fields.sedes?.value).toEqual([{ nombre: "Oficina de Girona", ciudad: null }]);
+  });
+});
+
 describe("schoolSuggestionSchema", () => {
   const base = {
     nombre: "Escola Nàutica Exemple",
