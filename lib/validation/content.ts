@@ -31,8 +31,17 @@ export const tasasValueSchema = z.object({
   expedicion: tasaSchema.nullable(),
 });
 
+// ciudad tolerante a omisión: el modelo la deja fuera a menudo y no merece
+// un reintento completo (que duplica el coste de la ejecución).
 export const sedesValueSchema = z.array(
-  z.object({ nombre: z.string().min(2), ciudad: z.string().min(2).nullable() })
+  z.object({
+    nombre: z.string().min(2),
+    ciudad: z
+      .string()
+      .min(2)
+      .nullish()
+      .transform((v) => v ?? null),
+  })
 );
 
 export const enlacesValueSchema = z.array(
