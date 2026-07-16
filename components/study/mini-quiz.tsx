@@ -96,8 +96,8 @@ export function MiniQuiz({
                       key={displayIndex}
                       className={cn(
                         "flex items-center gap-2 rounded-md border px-3 py-2",
-                        isCorrect && "border-emerald-500 bg-emerald-500/10",
-                        isChosenWrong && "border-red-500 bg-red-500/10"
+                        isCorrect && "border-success bg-success/10",
+                        isChosenWrong && "border-danger bg-danger/10"
                       )}
                     >
                       <RadioGroupItem
@@ -111,16 +111,10 @@ export function MiniQuiz({
                         {opcion}
                       </Label>
                       {isCorrect && (
-                        <CheckCircle2
-                          className="size-4 shrink-0 text-emerald-600 dark:text-emerald-400"
-                          aria-hidden
-                        />
+                        <CheckCircle2 className="text-success size-4 shrink-0" aria-hidden />
                       )}
                       {isChosenWrong && (
-                        <XCircle
-                          className="size-4 shrink-0 text-red-600 dark:text-red-400"
-                          aria-hidden
-                        />
+                        <XCircle className="text-danger size-4 shrink-0" aria-hidden />
                       )}
                     </div>
                   );
@@ -151,7 +145,7 @@ export function MiniQuiz({
           <p className="font-medium">
             {t("score", { aciertos: result.aciertos, total: result.total })}
           </p>
-          <p className="flex items-center gap-1 text-sm text-emerald-600 dark:text-emerald-400">
+          <p className="text-success flex items-center gap-1 text-sm">
             <CheckCircle2 className="size-4" aria-hidden />
             {t("lessonDone")}
           </p>

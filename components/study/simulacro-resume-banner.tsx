@@ -66,7 +66,7 @@ export function SimulacroResumeBanner({
     <>
       {summaries.map((summary) =>
         summary.degreeSlug === activeDegreeSlug ? (
-          <Card key={summary.degreeSlug} className="border-amber-500/50">
+          <Card key={summary.degreeSlug} className="border-warning/50">
             <CardHeader className="pb-2">
               <CardTitle className="text-base">{t("inProgressTitle")}</CardTitle>
             </CardHeader>

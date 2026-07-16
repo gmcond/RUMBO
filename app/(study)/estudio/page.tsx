@@ -225,9 +225,9 @@ export default async function StudyPage() {
                       <span
                         className={cn(
                           "size-2.5 shrink-0 rounded-full",
-                          row.level === "green" && "bg-emerald-500",
-                          row.level === "amber" && "bg-amber-500",
-                          row.level === "red" && "bg-red-500"
+                          row.level === "green" && "bg-success",
+                          row.level === "amber" && "bg-warning",
+                          row.level === "red" && "bg-danger"
                         )}
                         aria-hidden
                       />

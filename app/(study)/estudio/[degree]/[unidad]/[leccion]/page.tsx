@@ -66,10 +66,7 @@ export default async function LessonPage({
           </h1>
           {completed && (
             <Badge variant="secondary" className="gap-1">
-              <CheckCircle2
-                className="size-3.5 text-emerald-600 dark:text-emerald-400"
-                aria-hidden
-              />
+              <CheckCircle2 className="text-success size-3.5" aria-hidden />
               {t("completed")}
             </Badge>
           )}
