@@ -113,8 +113,8 @@ export function ChartExerciseTrainer({ tipo }: { tipo: ChartExerciseType }) {
                       "max-w-48",
                       checked &&
                         (ok
-                          ? "border-emerald-500/70 focus-visible:ring-emerald-500/40"
-                          : "border-red-500/70 focus-visible:ring-red-500/40")
+                          ? "border-success/70 focus-visible:ring-success/40"
+                          : "border-danger/70 focus-visible:ring-danger/40")
                     )}
                     value={answers[field.id] ?? ""}
                     disabled={checked}
@@ -123,12 +123,12 @@ export function ChartExerciseTrainer({ tipo }: { tipo: ChartExerciseType }) {
                   {checked &&
                     (ok ? (
                       <CheckCircle2
-                        className="size-5 shrink-0 text-emerald-600 dark:text-emerald-400"
+                        className="text-success size-5 shrink-0"
                         aria-label={t("correct")}
                       />
                     ) : (
                       <XCircle
-                        className="size-5 shrink-0 text-red-600 dark:text-red-400"
+                        className="text-danger size-5 shrink-0"
                         aria-label={t("incorrect")}
                       />
                     ))}

@@ -14,9 +14,9 @@ import type { SrsGrade } from "@/lib/srs";
 import { cn } from "@/lib/utils";
 
 const GRADE_STYLES: Record<SrsGrade, string> = {
-  again: "border-red-500/60 text-red-600 hover:bg-red-500/10 dark:text-red-400",
-  hard: "border-amber-500/60 text-amber-600 hover:bg-amber-500/10 dark:text-amber-400",
-  good: "border-emerald-500/60 text-emerald-600 hover:bg-emerald-500/10 dark:text-emerald-400",
+  again: "border-danger/60 text-danger hover:bg-danger/10",
+  hard: "border-warning/60 text-warning hover:bg-warning/10",
+  good: "border-success/60 text-success hover:bg-success/10",
   easy: "border-sky-500/60 text-sky-600 hover:bg-sky-500/10 dark:text-sky-400",
 };
 
@@ -41,7 +41,7 @@ export function ReviewSession({ cards }: { cards: SessionCard[] }) {
     return (
       <div className="flex flex-col items-start gap-3">
         <p className="flex items-center gap-2 font-medium">
-          <CheckCircle2 className="size-5 text-emerald-600 dark:text-emerald-400" aria-hidden />
+          <CheckCircle2 className="text-success size-5" aria-hidden />
           {t("sessionDone", { total: reviewed })}
         </p>
         <Button asChild variant="outline" size="sm">
@@ -90,7 +90,7 @@ export function ReviewSession({ cards }: { cards: SessionCard[] }) {
               <p className="text-base">{card.back}</p>
               {card.hint && (
                 <p className="text-muted-foreground flex items-start gap-2 text-sm">
-                  <Lightbulb className="mt-0.5 size-4 shrink-0 text-amber-500" aria-hidden />
+                  <Lightbulb className="text-warning mt-0.5 size-4 shrink-0" aria-hidden />
                   <span>
                     <span className="font-medium">
                       {card.kind === "concept" ? t("mnemonic") : t("explanation")}:

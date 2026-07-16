@@ -142,10 +142,7 @@ export default async function SimulacroPage() {
                   </span>
                   {Object.keys(topes).length > 0 && (
                     <span className="flex flex-wrap items-center gap-1.5 pl-7">
-                      <AlertTriangle
-                        className="size-3.5 text-amber-600 dark:text-amber-400"
-                        aria-hidden
-                      />
+                      <AlertTriangle className="text-warning size-3.5" aria-hidden />
                       {Object.entries(topes)
                         .sort(([a], [b]) => Number(a) - Number(b))
                         .map(([unit, tope]) => (
@@ -231,8 +228,8 @@ export default async function SimulacroPage() {
                         variant="outline"
                         className={
                           apto
-                            ? "ml-auto border-emerald-500/60 text-emerald-700 dark:text-emerald-400"
-                            : "ml-auto border-red-500/60 text-red-700 dark:text-red-400"
+                            ? "border-success/60 text-success ml-auto"
+                            : "border-danger/60 text-danger ml-auto"
                         }
                       >
                         {apto ? t("apto") : t("noApto")}

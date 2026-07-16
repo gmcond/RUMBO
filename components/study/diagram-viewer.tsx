@@ -229,10 +229,7 @@ export function DiagramViewer({
             {game.finished ? (
               <div className="flex flex-col items-start gap-3">
                 <p className="flex items-center gap-2 font-medium">
-                  <CheckCircle2
-                    className="size-5 text-emerald-600 dark:text-emerald-400"
-                    aria-hidden
-                  />
+                  <CheckCircle2 className="text-success size-5" aria-hidden />
                   {t("finished", { ok: game.okFirstTry, total: game.order.length })}
                 </p>
                 <Button size="sm" variant="outline" onClick={startGame}>

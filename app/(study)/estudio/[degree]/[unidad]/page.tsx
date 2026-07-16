@@ -94,7 +94,7 @@ export default async function UnitPage({
                   >
                     {done ? (
                       <CheckCircle2
-                        className="size-5 shrink-0 text-emerald-600 dark:text-emerald-400"
+                        className="text-success size-5 shrink-0"
                         aria-label={t("completed")}
                       />
                     ) : (

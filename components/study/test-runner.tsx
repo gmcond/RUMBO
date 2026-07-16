@@ -112,22 +112,16 @@ export function TestRunner({ questions }: { questions: TestQuestion[] }) {
             const chosenText = c.elegida !== null ? q.opciones[q.map.indexOf(c.elegida)] : null;
             const correctText = q.opciones[q.map.indexOf(c.correcta)];
             return (
-              <Card key={q.questionId} className={cn(!c.ok && "border-red-500/50")}>
+              <Card key={q.questionId} className={cn(!c.ok && "border-danger/50")}>
                 <CardContent className="flex flex-col gap-2 pt-4">
                   <p className="font-medium">
                     {qIndex + 1}. {q.enunciado}
                   </p>
                   <p className="flex items-start gap-2 text-sm">
                     {c.ok ? (
-                      <CheckCircle2
-                        className="mt-0.5 size-4 shrink-0 text-emerald-600 dark:text-emerald-400"
-                        aria-hidden
-                      />
+                      <CheckCircle2 className="text-success mt-0.5 size-4 shrink-0" aria-hidden />
                     ) : (
-                      <XCircle
-                        className="mt-0.5 size-4 shrink-0 text-red-600 dark:text-red-400"
-                        aria-hidden
-                      />
+                      <XCircle className="text-danger mt-0.5 size-4 shrink-0" aria-hidden />
                     )}
                     <span>
                       <span className="text-muted-foreground">{t("yourAnswer")}</span>{" "}

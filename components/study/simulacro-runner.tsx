@@ -408,9 +408,7 @@ export function SimulacroRunner({
         <p
           className={cn(
             "flex items-center gap-1.5 text-sm font-medium tabular-nums",
-            remaining !== null && remaining <= 300
-              ? "text-red-600 dark:text-red-400"
-              : "text-muted-foreground"
+            remaining !== null && remaining <= 300 ? "text-danger" : "text-muted-foreground"
           )}
         >
           <Clock className="size-4" aria-hidden />
@@ -438,7 +436,7 @@ export function SimulacroRunner({
               {i + 1}
               {flagged && (
                 <span
-                  className="absolute -top-1 -right-1 size-2 rounded-full bg-amber-500"
+                  className="bg-warning absolute -top-1 -right-1 size-2 rounded-full"
                   aria-hidden
                 />
               )}
@@ -466,10 +464,7 @@ export function SimulacroRunner({
               )
             }
           >
-            <Flag
-              className={cn("size-4", isMarked && "fill-amber-500 text-amber-500")}
-              aria-hidden
-            />
+            <Flag className={cn("size-4", isMarked && "fill-warning text-warning")} aria-hidden />
             <span className="sr-only sm:not-sr-only">
               {isMarked ? t("unmark") : t("markForReview")}
             </span>
@@ -491,11 +486,11 @@ export function SimulacroRunner({
                     !isRevealed && !timeUp && "hover:bg-muted/50",
                     isRevealed &&
                       displayIndex === correctDisplay &&
-                      "border-emerald-500/60 bg-emerald-500/10",
+                      "border-success/60 bg-success/10",
                     isRevealed &&
                       chosen &&
                       displayIndex !== correctDisplay &&
-                      "border-red-500/60 bg-red-500/10"
+                      "border-danger/60 bg-danger/10"
                   )}
                 >
                   <RadioGroupItem
@@ -519,15 +514,12 @@ export function SimulacroRunner({
               <p className="flex items-center gap-1.5 font-medium">
                 {selected[q.questionId] === correctDisplay ? (
                   <>
-                    <CheckCircle2
-                      className="size-4 text-emerald-600 dark:text-emerald-400"
-                      aria-hidden
-                    />
+                    <CheckCircle2 className="text-success size-4" aria-hidden />
                     {t("correct")}
                   </>
                 ) : (
                   <>
-                    <XCircle className="size-4 text-red-600 dark:text-red-400" aria-hidden />
+                    <XCircle className="text-danger size-4" aria-hidden />
                     {t("incorrect")}
                   </>
                 )}
@@ -596,16 +588,14 @@ function SimulacroResultView({
 
   return (
     <div className="flex flex-col gap-6">
-      <Card className={cn(apto ? "border-emerald-500/50" : "border-red-500/50")}>
+      <Card className={cn(apto ? "border-success/50" : "border-danger/50")}>
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2">
             {t("resultTitle")}
             <Badge
               className={cn(
                 "text-sm",
-                apto
-                  ? "bg-emerald-600 text-white dark:bg-emerald-500"
-                  : "bg-red-600 text-white dark:bg-red-500"
+                apto ? "bg-success text-background" : "bg-danger text-background"
               )}
             >
               {apto ? t("apto") : t("noApto")}
@@ -631,10 +621,7 @@ function SimulacroResultView({
             <ul className="flex flex-col gap-1 text-sm" aria-label={t("motivosLabel")}>
               {result.motivos.map((motivo, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <XCircle
-                    className="mt-0.5 size-4 shrink-0 text-red-600 dark:text-red-400"
-                    aria-hidden
-                  />
+                  <XCircle className="text-danger mt-0.5 size-4 shrink-0" aria-hidden />
                   {motivo.kind === "global"
                     ? t("motivoGlobal", { aciertos: motivo.aciertos, min: motivo.minAciertos })
                     : t("motivoTope", {
@@ -667,9 +654,7 @@ function SimulacroResultView({
                           variant={overTope ? "destructive" : "outline"}
                           className={cn(
                             "text-xs",
-                            atTope &&
-                              !overTope &&
-                              "border-amber-500/60 text-amber-700 dark:text-amber-400"
+                            atTope && !overTope && "border-warning/60 text-warning"
                           )}
                         >
                           {t("topeBadge", { fallos: stats.fallos, tope })}
@@ -700,22 +685,16 @@ function SimulacroResultView({
           const chosenText = c.elegida !== null ? q.opciones[q.map.indexOf(c.elegida)] : null;
           const correctText = q.opciones[q.map.indexOf(c.correcta)];
           return (
-            <Card key={q.questionId} className={cn(!c.ok && "border-red-500/50")}>
+            <Card key={q.questionId} className={cn(!c.ok && "border-danger/50")}>
               <CardContent className="flex flex-col gap-2 pt-4">
                 <p className="font-medium">
                   {qIndex + 1}. {q.enunciado}
                 </p>
                 <p className="flex items-start gap-2 text-sm">
                   {c.ok ? (
-                    <CheckCircle2
-                      className="mt-0.5 size-4 shrink-0 text-emerald-600 dark:text-emerald-400"
-                      aria-hidden
-                    />
+                    <CheckCircle2 className="text-success mt-0.5 size-4 shrink-0" aria-hidden />
                   ) : (
-                    <XCircle
-                      className="mt-0.5 size-4 shrink-0 text-red-600 dark:text-red-400"
-                      aria-hidden
-                    />
+                    <XCircle className="text-danger mt-0.5 size-4 shrink-0" aria-hidden />
                   )}
                   <span>
                     <span className="text-muted-foreground">{t("yourAnswer")}</span>{" "}

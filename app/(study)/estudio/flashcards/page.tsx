@@ -50,10 +50,10 @@ export default async function FlashcardsPage() {
         <p className="text-muted-foreground mt-1">{t("subtitle")}</p>
       </div>
 
-      <Card className="border-amber-500/40">
+      <Card className="border-warning/40">
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-base">
-            <AlertTriangle className="size-4 text-amber-500" aria-hidden />
+            <AlertTriangle className="text-warning size-4" aria-hidden />
             {t("failsDeck")}
           </CardTitle>
         </CardHeader>

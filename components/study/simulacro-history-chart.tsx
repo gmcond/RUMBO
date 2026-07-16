@@ -43,9 +43,7 @@ function HistoryTooltip({
       {p.veredicto && (
         <p
           className={
-            p.veredicto === "APTO"
-              ? "font-medium text-emerald-600 dark:text-emerald-400"
-              : "font-medium text-red-600 dark:text-red-400"
+            p.veredicto === "APTO" ? "text-success font-medium" : "text-danger font-medium"
           }
         >
           {p.veredicto === "APTO" ? t("apto") : t("noApto")}
