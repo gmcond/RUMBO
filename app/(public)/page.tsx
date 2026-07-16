@@ -1,47 +1,128 @@
-import { Anchor, GraduationCap, MapPinned } from "lucide-react";
+import { BookOpen, Layers, Timer } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+/** Marca de agua «brújula-estela»: anillos concéntricos + aguja (firma Travesía). */
+function CompassWake({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 240 240" aria-hidden fill="none" stroke="currentColor" className={className}>
+      <circle cx="120" cy="120" r="112" strokeWidth="1.5" />
+      <circle cx="120" cy="120" r="78" strokeWidth="1.5" />
+      <circle cx="120" cy="120" r="44" strokeWidth="1.5" />
+      <polygon
+        points="120,64 138,148 120,130 102,148"
+        fill="currentColor"
+        stroke="none"
+        transform="rotate(42 120 120)"
+      />
+      <circle cx="120" cy="120" r="4" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="border-foreground/60 inline-block border-b-[3px] border-double pb-2 font-sans text-[11px] font-bold tracking-[0.2em] uppercase">
+      {children}
+    </h2>
+  );
+}
+
 export default async function LandingPage() {
   const t = await getTranslations("landing");
 
   const features = [
-    { icon: GraduationCap, title: t("learnTitle"), body: t("learnBody") },
-    { icon: MapPinned, title: t("infoTitle"), body: t("infoBody") },
-    { icon: Anchor, title: t("sailTitle"), body: t("sailBody") },
+    { icon: BookOpen, title: t("feat1Title"), body: t("feat1Body") },
+    { icon: Layers, title: t("feat2Title"), body: t("feat2Body") },
+    { icon: Timer, title: t("feat3Title"), body: t("feat3Body") },
+  ];
+
+  const steps = [
+    { title: t("step1Title"), body: t("step1Body") },
+    { title: t("step2Title"), body: t("step2Body") },
+    { title: t("step3Title"), body: t("step3Body") },
   ];
 
   return (
     <main className="flex-1">
-      <section className="mx-auto flex w-full max-w-5xl flex-col items-center gap-6 px-4 py-16 text-center sm:py-24">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">RUMBO</h1>
-        <p className="text-2xl font-semibold sm:text-3xl">{t("tagline")}</p>
-        <p className="text-muted-foreground max-w-2xl text-lg">{t("subtitle")}</p>
-        <div className="flex w-full max-w-sm flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center">
-          <Button asChild size="lg">
-            <Link href="/registro">{t("ctaPrimary")}</Link>
-          </Button>
-          <Button asChild size="lg" variant="outline">
-            <Link href="/login">{t("ctaSecondary")}</Link>
-          </Button>
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+        <CompassWake className="text-foreground/[0.08] dark:text-foreground/[0.12] pointer-events-none absolute -top-10 -right-14 w-56 sm:w-72" />
+        <div className="mx-auto w-full max-w-5xl px-4 pt-14 pb-12 sm:pt-24 sm:pb-16">
+          <p className="text-signal text-[11px] font-bold tracking-[0.16em] uppercase">
+            {t("eyebrow")}
+          </p>
+          <h1 className="mt-3 max-w-2xl text-4xl leading-[1.08] font-semibold text-balance sm:text-6xl">
+            {t("heroTitle")}
+          </h1>
+          <p className="text-muted-foreground mt-4 max-w-xl text-base leading-relaxed sm:text-lg">
+            {t("heroSubtitle")}
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Button asChild size="lg" className="h-12 px-7 text-base font-bold">
+              <Link href="/registro">{t("ctaPrimary")}</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="h-12 px-7 text-base">
+              <Link href="/titulos/per">{t("ctaSecondary")}</Link>
+            </Button>
+          </div>
+          <p className="text-muted-foreground mt-6 text-xs sm:text-sm">{t("proof")}</p>
         </div>
       </section>
 
-      <section className="mx-auto grid w-full max-w-5xl gap-4 px-4 pb-16 sm:grid-cols-3 sm:pb-24">
-        {features.map((f) => (
-          <Card key={f.title}>
-            <CardHeader>
-              <f.icon className="text-primary size-8" aria-hidden />
-              <CardTitle className="text-xl">{f.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">{f.body}</p>
-            </CardContent>
-          </Card>
-        ))}
+      {/* Por qué funciona */}
+      <section className="mx-auto w-full max-w-5xl px-4 pb-4">
+        <SectionLabel>{t("whyTitle")}</SectionLabel>
+        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          {features.map((f) => (
+            <Card key={f.title} className="shadow-primary/5 shadow-md">
+              <CardHeader>
+                <f.icon className="text-primary size-6" aria-hidden />
+                <CardTitle className="text-lg">{f.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground text-sm leading-relaxed">{f.body}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* Cómo funciona */}
+      <section className="mx-auto w-full max-w-5xl px-4 pt-12 pb-4">
+        <SectionLabel>{t("howTitle")}</SectionLabel>
+        <ol className="mt-6 grid gap-6 sm:grid-cols-3">
+          {steps.map((s, i) => (
+            <li key={s.title} className="flex gap-4">
+              <span aria-hidden className="text-primary font-sans text-sm font-bold tabular-nums">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div>
+                <h3 className="font-sans text-[15px] font-bold">{s.title}</h3>
+                <p className="text-muted-foreground mt-1 text-sm">{s.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* Banda CTA */}
+      <section className="mx-auto w-full max-w-5xl px-4 py-12 sm:py-16">
+        <div className="bg-primary text-primary-foreground relative overflow-hidden rounded-xl px-6 py-10 sm:px-12">
+          <CompassWake className="pointer-events-none absolute -right-10 -bottom-24 w-52 text-current opacity-10" />
+          <h2 className="text-3xl font-semibold sm:text-4xl">{t("bandTitle")}</h2>
+          <p className="mt-2 max-w-md text-sm opacity-85 sm:text-base">{t("bandBody")}</p>
+          <Button
+            asChild
+            size="lg"
+            className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 mt-6 h-12 px-7 text-base font-bold"
+          >
+            <Link href="/registro">{t("bandCta")}</Link>
+          </Button>
+        </div>
       </section>
     </main>
   );
