@@ -27,7 +27,7 @@ export function Wordmark({ className }: { className?: string }) {
     <span
       className={cn(
         "font-brand inline-flex items-center leading-none font-extrabold tracking-tight",
-        className,
+        className
       )}
     >
       <span aria-hidden>RUMB</span>
