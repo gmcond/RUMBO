@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { logout } from "@/app/(auth)/actions";
+import { Wordmark } from "@/components/brand/wordmark";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -33,8 +34,8 @@ export async function Navbar() {
   return (
     <header className="bg-background/80 sticky top-0 z-50 border-b backdrop-blur">
       <nav className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between gap-2 px-4">
-        <Link href="/" className="text-lg font-bold tracking-tight">
-          RUMBO
+        <Link href="/" aria-label="RUMBO — inicio" className="rounded-md">
+          <Wordmark className="text-xl" />
         </Link>
 
         <div className="flex items-center gap-1 sm:gap-2">
