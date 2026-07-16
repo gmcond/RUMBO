@@ -45,7 +45,7 @@ export default async function DiagramPage({
             UT{unit.numero} · {unit.titulo}
           </Link>
         </Button>
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{diagram.titulo}</h1>
+        <h1 className="text-2xl font-semibold sm:text-3xl">{diagram.titulo}</h1>
       </div>
 
       <DiagramViewer svgUrl={diagram.svg_path} hotspots={hotspots.data} />

@@ -4,9 +4,10 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { BookOpen, Compass, Layers, ListChecks, Timer } from "lucide-react";
 
+import { SectionLabel } from "@/components/section-label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { parseTopes, type UnitBreakdown } from "@/lib/exam-grading";
 import { attemptBelongsToDegree, getActiveDegree, getUnitsForDegree } from "@/lib/study/data";
@@ -24,6 +25,7 @@ export default async function StudyPage() {
   } = await supabase.auth.getUser();
 
   let profileCcaa: string | null = null;
+  let profileNombre: string | null = null;
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
@@ -35,6 +37,7 @@ export default async function StudyPage() {
       redirect("/onboarding");
     }
     profileCcaa = profile?.ccaa_objetivo ?? null;
+    profileNombre = profile?.nombre?.split(" ")[0] ?? null;
   }
 
   const t = await getTranslations("study");
@@ -120,91 +123,73 @@ export default async function StudyPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
+      <h1 className="text-3xl font-semibold sm:text-4xl">
+        {profileNombre ? t("panel.greeting", { name: profileNombre }) : t("title")}
+      </h1>
 
-      <div className="grid gap-3 sm:grid-cols-3">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <BookOpen className="text-muted-foreground size-4" aria-hidden />
-              {t("units")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Button asChild size="sm" className="w-full">
-              <Link href={`/estudio/${degree.slug}`}>{t("panel.unitsCta")}</Link>
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <Layers className="text-muted-foreground size-4" aria-hidden />
-              {t("panel.dueTitle")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-2">
-            <p className="text-muted-foreground text-sm">
-              {t("panel.dueCount", { count: dueCount })}
-            </p>
-            <Button
-              asChild
-              size="sm"
-              variant={dueCount > 0 ? "default" : "outline"}
-              className="w-full"
-            >
-              <Link href="/estudio/flashcards">{t("panel.flashcardsCta")}</Link>
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <ListChecks className="text-muted-foreground size-4" aria-hidden />
-              {t("tests.title")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Button asChild size="sm" variant="outline" className="w-full">
-              <Link href="/estudio/tests">{t("panel.testsCta")}</Link>
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <Timer className="text-muted-foreground size-4" aria-hidden />
-              {t("simulacro.title")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Button asChild size="sm" variant="outline" className="w-full">
-              <Link href="/estudio/simulacro">{t("panel.simulacroCta")}</Link>
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <Compass className="text-muted-foreground size-4" aria-hidden />
-              {t("carta.title")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Button asChild size="sm" variant="outline" className="w-full">
-              <Link href="/estudio/carta">{t("panel.cartaCta")}</Link>
-            </Button>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        {[
+          {
+            href: `/estudio/${degree.slug}`,
+            icon: BookOpen,
+            title: t("units"),
+            sub: t("panel.unitsCta"),
+            badge: 0,
+          },
+          {
+            href: "/estudio/flashcards",
+            icon: Layers,
+            title: t("panel.dueTitle"),
+            sub: t("panel.dueCount", { count: dueCount }),
+            badge: dueCount,
+          },
+          {
+            href: "/estudio/tests",
+            icon: ListChecks,
+            title: t("tests.title"),
+            sub: t("panel.testsCta"),
+            badge: 0,
+          },
+          {
+            href: "/estudio/simulacro",
+            icon: Timer,
+            title: t("simulacro.title"),
+            sub: t("panel.simulacroCta"),
+            badge: 0,
+          },
+          {
+            href: "/estudio/carta",
+            icon: Compass,
+            title: t("carta.title"),
+            sub: t("panel.cartaCta"),
+            badge: 0,
+          },
+        ].map((tile) => (
+          <Link
+            key={tile.href}
+            href={tile.href}
+            className="group bg-card hover:border-primary/50 focus-visible:ring-ring/50 flex min-h-24 flex-col gap-1.5 rounded-xl border p-4 shadow-sm transition-colors focus-visible:ring-[3px] focus-visible:outline-none"
+          >
+            <span className="flex items-center justify-between">
+              <tile.icon
+                className="text-primary size-5 transition-transform group-hover:-translate-y-0.5"
+                aria-hidden
+              />
+              {tile.badge > 0 && (
+                <span className="bg-signal/10 text-signal rounded-full px-2 py-0.5 text-xs font-bold tabular-nums">
+                  {tile.badge}
+                </span>
+              )}
+            </span>
+            <span className="text-sm font-bold">{tile.title}</span>
+            <span className="text-muted-foreground text-xs leading-snug">{tile.sub}</span>
+          </Link>
+        ))}
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">{t("readiness.title")}</CardTitle>
+          <SectionLabel>{t("readiness.title")}</SectionLabel>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
           {readiness.length === 0 ? (
@@ -256,7 +241,7 @@ export default async function StudyPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">{t("panel.progressTitle")}</CardTitle>
+          <SectionLabel>{t("panel.progressTitle")}</SectionLabel>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
           {units.map((unit) => {
@@ -283,7 +268,7 @@ export default async function StudyPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">{t("panel.recentTitle")}</CardTitle>
+          <SectionLabel>{t("panel.recentTitle")}</SectionLabel>
         </CardHeader>
         <CardContent>
           {attempts.length === 0 ? (

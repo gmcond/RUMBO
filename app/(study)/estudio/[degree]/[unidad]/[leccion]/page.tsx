@@ -61,7 +61,7 @@ export default async function LessonPage({
           </Link>
         </Button>
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          <h1 className="text-2xl font-semibold sm:text-3xl">
             {unit.numero}.{lesson.orden} {lesson.titulo}
           </h1>
           {completed && (

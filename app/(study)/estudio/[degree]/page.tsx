@@ -47,7 +47,7 @@ export default async function DegreePage({ params }: { params: Promise<{ degree:
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">{degree.nombre}</h1>
+        <h1 className="text-3xl font-semibold">{degree.nombre}</h1>
         <p className="text-muted-foreground mt-1">{t("units")}</p>
       </div>
 

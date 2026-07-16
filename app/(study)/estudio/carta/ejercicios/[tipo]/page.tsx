@@ -33,7 +33,7 @@ export default async function CartaEjercicioPage({
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">{info.titulo}</h1>
+          <h1 className="text-2xl font-semibold">{info.titulo}</h1>
           <p className="text-muted-foreground mt-0.5 text-sm">{info.descripcion}</p>
         </div>
       </div>
