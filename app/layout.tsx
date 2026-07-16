@@ -18,11 +18,11 @@ const fraunces = Fraunces({
   axes: ["opsz"],
 });
 
-// Solo para el wordmark: subset mínimo con los glifos de la marca
+// Solo para el wordmark de la marca (un único peso)
 const wordmark = Bricolage_Grotesque({
   variable: "--font-wordmark",
   weight: "800",
-  text: "RUMBO",
+  subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
