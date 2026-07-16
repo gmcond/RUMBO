@@ -41,7 +41,7 @@ export default async function TestsPage({
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
+        <h1 className="text-3xl font-semibold">{t("title")}</h1>
         <p className="text-muted-foreground mt-1">{t("subtitle")}</p>
       </div>
 
@@ -55,7 +55,7 @@ export default async function TestsPage({
               {units.map((unit) => (
                 <label
                   key={unit.id}
-                  className="hover:bg-muted/50 flex cursor-pointer items-center gap-3 rounded-md border px-3 py-2"
+                  className="hover:bg-muted/50 has-checked:border-primary has-checked:bg-primary/5 flex cursor-pointer items-center gap-3 rounded-md border px-3 py-2"
                 >
                   <input
                     type="checkbox"
@@ -86,7 +86,7 @@ export default async function TestsPage({
             {[5, 10, 20].map((n) => (
               <label
                 key={n}
-                className="hover:bg-muted/50 flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm font-medium"
+                className="hover:bg-muted/50 has-checked:border-primary has-checked:bg-primary/5 flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm font-medium"
               >
                 <input
                   type="radio"
@@ -115,7 +115,7 @@ export default async function TestsPage({
             ).map(([value, label]) => (
               <label
                 key={value}
-                className="hover:bg-muted/50 flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm font-medium"
+                className="hover:bg-muted/50 has-checked:border-primary has-checked:bg-primary/5 flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm font-medium"
               >
                 <input
                   type="radio"

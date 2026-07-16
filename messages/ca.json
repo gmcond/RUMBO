@@ -76,6 +76,7 @@
       "label": "Titulació"
     },
     "panel": {
+      "greeting": "Hola, {name}",
       "unitsCta": "Mostra les unitats",
       "flashcardsCta": "Repassa",
       "testsCta": "Fes un test",

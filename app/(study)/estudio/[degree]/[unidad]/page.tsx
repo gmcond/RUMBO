@@ -52,7 +52,7 @@ export default async function UnitPage({
             {degree.nombre}
           </Link>
         </Button>
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+        <h1 className="text-2xl font-semibold sm:text-3xl">
           UT{unit.numero} · {unit.titulo}
         </h1>
         {unit.descripcion && <p className="text-muted-foreground mt-2">{unit.descripcion}</p>}

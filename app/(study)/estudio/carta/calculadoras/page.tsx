@@ -14,7 +14,7 @@ export default async function CalculadorasPage() {
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">{t("calculatorsTitle")}</h1>
+        <h1 className="text-2xl font-semibold">{t("calculatorsTitle")}</h1>
         <p className="text-muted-foreground mt-0.5 text-sm">{t("calculatorsSubtitle")}</p>
       </div>
       <ChartCalculators />

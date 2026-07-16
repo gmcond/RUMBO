@@ -76,6 +76,7 @@
       "label": "Titulación"
     },
     "panel": {
+      "greeting": "Hola, {name}",
       "unitsCta": "Ver unidades",
       "flashcardsCta": "Repasar",
       "testsCta": "Hacer un test",

@@ -51,7 +51,7 @@ export default async function DeckPage({ params }: { params: Promise<{ mazo: str
             {t("backToDecks")}
           </Link>
         </Button>
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{deckTitle}</h1>
+        <h1 className="text-2xl font-semibold sm:text-3xl">{deckTitle}</h1>
       </div>
 
       {cards.length === 0 ? (

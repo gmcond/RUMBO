@@ -2,34 +2,10 @@ import { BookOpen, Layers, Timer } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
+import { CompassWake } from "@/components/brand/compass-wake";
+import { SectionLabel } from "@/components/section-label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-/** Marca de agua «brújula-estela»: anillos concéntricos + aguja (firma Travesía). */
-function CompassWake({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 240 240" aria-hidden fill="none" stroke="currentColor" className={className}>
-      <circle cx="120" cy="120" r="112" strokeWidth="1.5" />
-      <circle cx="120" cy="120" r="78" strokeWidth="1.5" />
-      <circle cx="120" cy="120" r="44" strokeWidth="1.5" />
-      <polygon
-        points="120,64 138,148 120,130 102,148"
-        fill="currentColor"
-        stroke="none"
-        transform="rotate(42 120 120)"
-      />
-      <circle cx="120" cy="120" r="4" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
-
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 className="border-foreground/60 inline-block border-b-[3px] border-double pb-2 font-sans text-[11px] font-bold tracking-[0.2em] uppercase">
-      {children}
-    </h2>
-  );
-}
 
 export default async function LandingPage() {
   const t = await getTranslations("landing");
