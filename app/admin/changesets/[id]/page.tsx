@@ -63,7 +63,7 @@ export default async function ChangesetDetailPage({ params }: { params: Promise<
       </Link>
 
       <div>
-        <h1 className="flex flex-wrap items-center gap-3 text-3xl font-bold tracking-tight">
+        <h1 className="flex flex-wrap items-center gap-3 text-3xl font-semibold">
           {t("detailTitle", { scope: changeset.scope })}
           <Badge variant={pending ? "default" : "secondary"}>{changeset.estado}</Badge>
         </h1>
@@ -153,7 +153,7 @@ export default async function ChangesetDetailPage({ params }: { params: Promise<
                     className="font-mono text-xs"
                   />
                 ) : (
-                  <pre className="max-h-64 overflow-auto rounded-md border border-emerald-500/40 bg-emerald-500/5 p-3 text-xs whitespace-pre-wrap">
+                  <pre className="border-success/40 bg-success/5 max-h-64 overflow-auto rounded-md border p-3 text-xs whitespace-pre-wrap">
                     {renderValue(entry.new, t("emptyValue"))}
                   </pre>
                 )}

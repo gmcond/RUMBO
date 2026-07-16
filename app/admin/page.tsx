@@ -40,7 +40,7 @@ export default async function AdminPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
+      <h1 className="text-3xl font-semibold">{t("title")}</h1>
 
       {sections.map((section) => (
         <Card key={section.href}>

@@ -381,6 +381,7 @@
     }
   },
   "guia": {
+    "eyebrow": "Titulacions nàutiques",
     "attributionsTitle": "Atribucions",
     "requirementsTitle": "Requisits",
     "reqNote": "Els detalls administratius (certificats, taxes i terminis) depenen de cada comunitat autònoma: consulta la seva fitxa amb dades verificades i font oficial.",
@@ -472,6 +473,7 @@
     }
   },
   "escuelas": {
+    "eyebrow": "Directori · Espanya",
     "metaTitle": "Escoles nàutiques per preparar el PER",
     "metaDescription": "Directori d'escoles nàutiques per comunitat autònoma i ciutat per preparar el PER: modalitats, web i escoles verificades.",
     "title": "Escoles nàutiques",

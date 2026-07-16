@@ -103,13 +103,13 @@ export default async function DegreeCcaaPage({ params }: Params) {
         {t("backToGuide")}
       </Link>
 
-      <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+      <h1 className="mt-3 text-3xl font-semibold sm:text-4xl">
         {t("title", { degree: degreeSlug.toUpperCase(), name: ccaaMeta.name })}
       </h1>
 
       {verified ? (
         <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-          <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+          <span className="text-success inline-flex items-center gap-1.5">
             <BadgeCheck className="size-4" aria-hidden />
             {t("verifiedOn", { date: formatDate(info!.last_verified_at) })}
           </span>
@@ -126,12 +126,9 @@ export default async function DegreeCcaaPage({ params }: Params) {
           )}
         </div>
       ) : (
-        <div className="mt-4 rounded-md border border-amber-500/40 bg-amber-500/10 p-4">
+        <div className="border-warning/40 bg-warning/10 mt-4 rounded-md border p-4">
           <p className="flex items-center gap-2 font-medium">
-            <CircleAlert
-              className="size-4 shrink-0 text-amber-600 dark:text-amber-400"
-              aria-hidden
-            />
+            <CircleAlert className="text-warning size-4 shrink-0" aria-hidden />
             {t("pendingTitle")}
           </p>
           <p className="text-muted-foreground mt-1 text-sm">
