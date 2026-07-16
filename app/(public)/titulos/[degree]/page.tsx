@@ -70,7 +70,10 @@ export default async function DegreeGuidePage({ params }: Params) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{td("title")}</h1>
+      <p className="text-signal text-[11px] font-bold tracking-[0.16em] uppercase">
+        {t("eyebrow")}
+      </p>
+      <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">{td("title")}</h1>
       <p className="text-muted-foreground mt-4 text-lg">{degree.descripcion ?? td("intro")}</p>
 
       {degree.atribuciones_md && (
@@ -121,7 +124,7 @@ export default async function DegreeGuidePage({ params }: Params) {
             <Link
               key={c.code}
               href={`/titulos/${degreeSlug}/${c.code}`}
-              className="hover:bg-accent hover:text-accent-foreground rounded-md border px-3 py-2 text-sm transition-colors"
+              className="hover:bg-accent hover:text-accent-foreground hover:border-primary/50 rounded-md border px-3 py-2 text-sm transition-colors"
             >
               {c.name}
             </Link>

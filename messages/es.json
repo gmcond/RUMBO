@@ -381,6 +381,7 @@
     }
   },
   "guia": {
+    "eyebrow": "Titulaciones náuticas",
     "attributionsTitle": "Atribuciones",
     "requirementsTitle": "Requisitos",
     "reqNote": "Los detalles administrativos (certificados, tasas y plazos) dependen de cada comunidad autónoma: consulta su ficha con datos verificados y fuente oficial.",
@@ -472,6 +473,7 @@
     }
   },
   "escuelas": {
+    "eyebrow": "Directorio · España",
     "metaTitle": "Escuelas náuticas para preparar el PER",
     "metaDescription": "Directorio de escuelas náuticas por comunidad autónoma y ciudad para preparar el PER: modalidades, web y escuelas verificadas.",
     "title": "Escuelas náuticas",

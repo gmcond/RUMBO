@@ -45,7 +45,7 @@ export default async function EditQuestionPage({ params }: { params: Promise<{ i
           </Link>
         </Button>
         <div className="flex flex-wrap items-center gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">{t("edit")}</h1>
+          <h1 className="text-2xl font-semibold">{t("edit")}</h1>
           <Badge variant="outline">{question.origen}</Badge>
           <Badge variant={question.estado === "published" ? "secondary" : "destructive"}>
             {question.estado}

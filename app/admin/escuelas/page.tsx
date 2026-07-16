@@ -35,9 +35,7 @@ function SchoolMeta({ school }: { school: School }) {
     <div className="min-w-0">
       <p className="flex flex-wrap items-center gap-1.5 font-medium">
         {school.nombre}
-        {school.verificada && (
-          <BadgeCheck className="size-4 text-emerald-600 dark:text-emerald-400" aria-hidden />
-        )}
+        {school.verificada && <BadgeCheck className="text-success size-4" aria-hidden />}
         <Badge variant="outline">{school.origen}</Badge>
       </p>
       <p className="text-muted-foreground mt-0.5 text-sm">
@@ -79,7 +77,7 @@ export default async function AdminSchoolsPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
+        <h1 className="text-3xl font-semibold">{t("title")}</h1>
         <p className="text-muted-foreground mt-1">{t("subtitle")}</p>
       </div>
 

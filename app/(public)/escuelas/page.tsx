@@ -48,7 +48,10 @@ export default async function EscuelasPage({ searchParams }: SearchParams) {
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10">
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{t("title")}</h1>
+      <p className="text-signal text-[11px] font-bold tracking-[0.16em] uppercase">
+        {t("eyebrow")}
+      </p>
+      <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">{t("title")}</h1>
       <p className="text-muted-foreground mt-3">{t("intro")}</p>
 
       {/* Filtros vía GET: sin JS de cliente, URLs compartibles e indexables */}
@@ -92,7 +95,7 @@ export default async function EscuelasPage({ searchParams }: SearchParams) {
                     <p className="flex items-center gap-1.5 font-semibold">
                       {school.nombre}
                       {school.verificada && (
-                        <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+                        <span className="text-success inline-flex items-center gap-1">
                           <BadgeCheck className="size-4" aria-hidden />
                           <span className="sr-only sm:not-sr-only sm:text-xs sm:font-normal">
                             {t("verifiedBadge")}
@@ -144,7 +147,7 @@ export default async function EscuelasPage({ searchParams }: SearchParams) {
           {params.sugerencia === "ok" && (
             <p
               role="status"
-              className="mb-4 rounded-md border border-emerald-500/40 bg-emerald-500/10 p-3 text-sm"
+              className="border-success/40 bg-success/10 mb-4 rounded-md border p-3 text-sm"
             >
               {t("suggestOk")}
             </p>
